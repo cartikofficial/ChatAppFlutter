@@ -34,9 +34,11 @@ class _RegisterscreenState extends State<Registerscreen> {
               child: Form(
                 key: formkey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 70,
-                    horizontal: 20,
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
