@@ -26,6 +26,8 @@ class Databaseservice {
     QuerySnapshot snapshot =
         await usercollection.where("Email", isEqualTo: email).get();
     return snapshot;
+    // We can aslo write it as:-
+    // return await usercollection.where("Email", isEqualTo: email).get();
   }
 
   // Getting Users group data

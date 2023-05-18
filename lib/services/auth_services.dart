@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:groupie/services/database_service.dart';
 import 'package:groupie/services/shared_preferences.dart';
 
@@ -13,7 +13,7 @@ class Authservices {
   Future registeruserwithemailandpassword(
       String name, String email, String password, context) async {
     try {
-      // A user credential is a Username and Password authentication token that is bound to a particular user
+      // UserCredential is a Username and Password authentication token that is bound to a particular user
       UserCredential userCredential =
           await firebaseauath.createUserWithEmailAndPassword(
         email: email,
@@ -31,7 +31,6 @@ class Authservices {
   Future signinuserwithemailandpassword(
       String email, String password, context) async {
     try {
-      // UserCredential userCredential =
       await firebaseauath.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -78,6 +77,7 @@ class Authservices {
       await Sharedprefererncedata.saveuserlogedinstatus(false);
       await Sharedprefererncedata.saveuseremail("");
       await Sharedprefererncedata.saveusername("");
+      await GoogleSignIn().signOut();
       await firebaseauath.signOut();
     } catch (e) {
       showsnackbar(context, Colors.red, e);
