@@ -29,12 +29,12 @@ class _UserdrawerState extends State<Userdrawer> {
   void getuserdata() async {
     await Sharedprefererncedata.getusername().then((value) {
       setState(() {
-        username = value;
+        username = value!;
       });
     });
     await Sharedprefererncedata.getuseremail().then((value) {
       setState(() {
-        useremail = value;
+        useremail = value!;
       });
     });
   }

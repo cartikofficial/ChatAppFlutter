@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void getuserdata() async {
     await Sharedprefererncedata.getusername().then((value) {
       setState(() {
-        username = value;
+        username = value!;
       });
     });
   }
