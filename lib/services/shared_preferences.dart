@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Shared preference is use to store local and users friendly data
-// Shared Preferences allow you to save and retrieve data in the form of key,value pair
+// Shared Preferences allow you to save and retrieve data in the form of key-value pair
 class Sharedprefererncedata {
   // Keys
   static String logedinkey = "LOGEDINKEY";
@@ -32,12 +32,12 @@ class Sharedprefererncedata {
     return pref.getBool(logedinkey);
   }
 
-  static Future getusername() async {
+  static Future<String?> getusername() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getString(usernamekey);
   }
 
-  static Future getuseremail() async {
+  static Future<String?> getuseremail() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getString(useremailkey);
   }

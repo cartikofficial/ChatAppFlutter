@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
-import '../widgets/widget.dart';
-import '../shared/constants.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:groupie/widgets/widget.dart';
+import 'package:groupie/shared/constants.dart';
 import 'package:groupie/Screens/home_screen.dart';
 import 'package:groupie/services/auth_services.dart';
 import 'package:groupie/Screens/login_in_screen.dart';
@@ -193,7 +193,7 @@ class _RegisterscreenState extends State<Registerscreen> {
     );
   }
 
-  register() async {
+  register() {
     if (formkey.currentState!.validate()) {
       setState(() {
         isloading = true;
