@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Shared preference is use to store local and users friendly data
-// Shared Preferences allow you to save and retrieve data in the form of key-value pair
+// Shared Preferences allow you to save and retrieve data in the form of key-value pairs
 class Sharedprefererncedata {
   // Keys
   static String logedinkey = "LOGEDINKEY";
