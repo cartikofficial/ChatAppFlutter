@@ -63,10 +63,7 @@ class _UserdrawerState extends State<Userdrawer> {
             leading: const Icon(Icons.group),
             selected: true,
             selectedColor: Constants().primarycolor,
-            title: const Text(
-              "Group",
-              style: TextStyle(color: Colors.black),
-            ),
+            title: const Text("Group", style: TextStyle(color: Colors.black)),
           ),
           const Divider(height: 2),
           ListTile(
@@ -79,16 +76,13 @@ class _UserdrawerState extends State<Userdrawer> {
             selected: selectd,
             leading: const Icon(Icons.account_box_sharp),
             selectedColor: Constants().primarycolor,
-            title: const Text(
-              "Profile",
-              style: TextStyle(color: Colors.black),
-            ),
+            title: const Text("Profile", style: TextStyle(color: Colors.black)),
           ),
           const Divider(height: 2),
           ListTile(
             onTap: () async {
               showDialog(
-//if we click outside the box the box will not disapperar becausebarrierDismissible is false
+                //if we click outside the box the box will not disapperar becausebarrierDismissible is false
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
@@ -111,10 +105,7 @@ class _UserdrawerState extends State<Userdrawer> {
                             nextpagereplacement(context, const Loginscreen());
                           });
                         },
-                        icon: const Icon(
-                          Icons.done,
-                          color: Colors.green,
-                        ),
+                        icon: const Icon(Icons.done, color: Colors.green),
                       ),
                     ],
                   );
@@ -123,10 +114,7 @@ class _UserdrawerState extends State<Userdrawer> {
             },
             leading: const Icon(Icons.logout),
             selectedColor: Constants().primarycolor,
-            title: const Text(
-              "Logout",
-              style: TextStyle(color: Colors.black),
-            ),
+            title: const Text("Logout", style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
