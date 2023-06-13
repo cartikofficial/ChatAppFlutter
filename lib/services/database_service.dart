@@ -31,7 +31,7 @@ class Databaseservice {
   }
 
   // Getting Users group data
-  getusergroups() async {
+  Future getusergroups() async {
     return usercollection.doc(uid).snapshots();
   }
 
@@ -60,7 +60,7 @@ class Databaseservice {
   }
 
   // Get Chats from database
-  getchat(String groupId) async {
+  Future getchat(String groupId) async {
     return groupcollection
         .doc(groupId)
         .collection("User_messages")
@@ -86,7 +86,6 @@ class Databaseservice {
 
   // Is-user joined?
   Future isuserjoined(String groupname, String groupid, String username) async {
-    // DocumentReference userdocumnetreference = usercollection.doc(uid);
     DocumentSnapshot documendSnapshot = await usercollection.doc(uid).get();
     List<dynamic> groups = await documendSnapshot["Groups"];
     if (groups.contains("${groupid}_$groupname")) {
@@ -98,7 +97,10 @@ class Databaseservice {
 
   // Toggeling the group entry and exit
   Future togglejoingroup(
-      String groupid, String username, String groupname) async {
+    String groupid,
+    String username,
+    String groupname,
+  ) async {
     DocumentReference userdocumentreference = usercollection.doc(uid);
     DocumentReference groupdocumnetreference = groupcollection.doc(groupid);
     DocumentSnapshot documendSnapshot = await userdocumentreference.get();

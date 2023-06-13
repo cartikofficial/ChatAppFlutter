@@ -43,7 +43,7 @@ class _ChatscreenState extends State<Chatscreen> {
     });
     Databaseservice().getgroupAdmin(widget.groupId).then((value) {
       setState(() {
-        admin = value;
+        admin = value.toString();
       });
     });
   }
