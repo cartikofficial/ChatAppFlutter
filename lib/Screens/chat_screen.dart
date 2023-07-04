@@ -49,9 +49,8 @@ class _ChatscreenState extends State<Chatscreen> {
   }
 
   firebaseshownotification() {
-    if (kDebugMode) {
-      print("Notification Sended");
-    }
+    if (kDebugMode) print("Notification Sended");
+
     flutterLocalNotificationsPlugin.show(
       1,
       "this notificatio is sended by $admin",
@@ -102,8 +101,8 @@ class _ChatscreenState extends State<Chatscreen> {
             child: chatsandmessage(),
           ),
           Container(
+            width: double.infinity,
             alignment: Alignment.bottomCenter,
-            width: MediaQuery.of(context).size.width,
             child: Container(
               color: Colors.grey[700],
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 15),

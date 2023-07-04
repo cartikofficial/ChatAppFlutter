@@ -19,6 +19,7 @@ class _MessagetileState extends State<Messagetile> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: EdgeInsets.only(
         top: 5,
         bottom: 5,

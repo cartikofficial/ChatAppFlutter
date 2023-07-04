@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  popUpDialoge(BuildContext context) {
+  void popUpDialoge(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -196,6 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.data["Groups"] != null) {
             if (snapshot.data["Groups"].length != 0) {
               return ListView.builder(
+                shrinkWrap: true,
                 itemCount: snapshot.data["Groups"].length,
                 itemBuilder: (context, index) {
                   int reverseindex = snapshot.data['Groups'].length - index - 1;

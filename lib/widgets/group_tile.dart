@@ -33,6 +33,7 @@ class _GrouptileState extends State<Grouptile> {
         );
       },
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: ListTile(
           leading: CircleAvatar(
