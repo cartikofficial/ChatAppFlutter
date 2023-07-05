@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:groupie/Screens/chat_screen.dart';
-import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/widget.dart';
+import 'package:groupie/shared/constants.dart';
+import 'package:groupie/Screens/chat_screen.dart';
 
 class Grouptile extends StatefulWidget {
   final String username;
@@ -22,18 +22,17 @@ class _GrouptileState extends State<Grouptile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        nextpage(
-          context,
-          Chatscreen(
-            username: widget.username,
-            groupId: widget.groupId,
-            groupname: widget.groupname,
-          ),
-        );
-      },
+      onTap: () => nextpage(
+        context,
+        Chatscreen(
+          username: widget.username,
+          groupId: widget.groupId,
+          groupname: widget.groupname,
+        ),
+      ),
       child: Container(
         width: double.infinity,
+        alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: ListTile(
           leading: CircleAvatar(
@@ -43,9 +42,9 @@ class _GrouptileState extends State<Grouptile> {
               widget.groupname.substring(0, 1),
               textAlign: TextAlign.center,
               style: const TextStyle(
+                fontSize: 25,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 25,
               ),
             ),
           ),

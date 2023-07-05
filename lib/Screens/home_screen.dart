@@ -39,9 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getuserdata() async {
     await Sharedprefererncedata.getusername().then((value) {
-      setState(() {
-        username = value!;
-      });
+      setState(() => username = value!);
     });
   }
 
@@ -77,9 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: isloading
           ? Center(
-              child: CircularProgressIndicator(
-                color: Constants().primarycolor,
-              ),
+              child: CircularProgressIndicator(color: Constants().primarycolor),
             )
           : grouplist(),
       floatingActionButton: FloatingActionButton(
@@ -93,22 +89,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void popUpDialoge(BuildContext context) {
     showDialog(
-      barrierDismissible: false,
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text(
-            "Creat a groups",
-            textAlign: TextAlign.left,
-          ),
+          title: const Text("Creat a groups", textAlign: TextAlign.left),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 onChanged: (value) {
-                  setState(() {
-                    groupname = value;
-                  });
+                  setState(() => groupname = value);
                 },
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
@@ -126,9 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(
-                      color: Colors.red,
-                    ),
+                    borderSide: const BorderSide(color: Colors.red),
                   ),
                 ),
               ),
@@ -149,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 if (groupname != "") {
                   setState(() => isloading = true);
-
                   Databaseservice(uid: FirebaseAuth.instance.currentUser!.uid)
                       .creategroup(
                     username,
@@ -179,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  grouplist() {
+  StreamBuilder<dynamic> grouplist() {
     return StreamBuilder(
       stream: groups,
       initialData: null,
@@ -193,10 +181,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   int reverseindex = snapshot.data['Groups'].length - index - 1;
                   return Grouptile(
-                    username: snapshot.data["Name"],
+                    username: username,
                     groupId: getid(snapshot.data["Groups"][reverseindex]),
-                    groupname:
-                        getgrouopnamne(snapshot.data["Groups"][reverseindex]),
+                    groupname: getgrouopnamne(
+                      snapshot.data["Groups"][reverseindex],
+                    ),
                   );
                 },
               );
