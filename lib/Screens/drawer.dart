@@ -1,4 +1,3 @@
-// ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
@@ -15,10 +14,11 @@ class Userdrawer extends StatefulWidget {
 }
 
 class _UserdrawerState extends State<Userdrawer> {
-  Authservices authservices = Authservices();
   bool selectd = false;
   String username = "";
   String useremail = "";
+  Authservices authservices = Authservices();
+
   @override
   void initState() {
     super.initState();
@@ -27,14 +27,11 @@ class _UserdrawerState extends State<Userdrawer> {
 
   void getuserdata() async {
     await Sharedprefererncedata.getusername().then((value) {
-      setState(() {
-        username = value!;
-      });
+      setState(() => username = value!);
     });
+
     await Sharedprefererncedata.getuseremail().then((value) {
-      setState(() {
-        useremail = value!;
-      });
+      setState(() => useremail = value!);
     });
   }
 

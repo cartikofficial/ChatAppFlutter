@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:groupie/Screens/Drawer.dart';
 import 'package:groupie/widgets/widget.dart';
+import '../services/shared_preferences.dart';
+import 'package:groupie/Screens/Drawer.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/group_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:groupie/Screens/search_screen.dart';
 import 'package:groupie/services/database_service.dart';
-
-import '../services/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,9 +17,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Stream? groups;
-  bool isloading = false;
-  String groupname = "";
   String username = "";
+  String groupname = "";
+  bool isloading = false;
   final ValueNotifier<bool> toogle = ValueNotifier<bool>(true);
 
   @override
@@ -84,10 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : grouplist(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          popUpDialoge(context);
-        },
         elevation: 0,
+        onPressed: () => popUpDialoge(context),
         backgroundColor: Constants().primarycolor,
         child: const Icon(Icons.add, size: 35),
       ),
@@ -142,9 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Constants().primarycolor,
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text("Cancle"),
             ),
             ElevatedButton(
@@ -153,9 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onPressed: () {
                 if (groupname != "") {
-                  setState(() {
-                    isloading = true;
-                  });
+                  setState(() => isloading = true);
+
                   Databaseservice(uid: FirebaseAuth.instance.currentUser!.uid)
                       .creategroup(
                     username,
@@ -163,11 +157,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     groupname,
                   )
                       .whenComplete(() {
-                    setState(() {
-                      isloading = false;
-                    });
+                    setState(() => isloading = false);
                   });
+
                   Navigator.of(context).pop();
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Group Create sucessfully"),
@@ -177,9 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
               },
-              child: const Text(
-                "Creat",
-              ),
+              child: const Text("Creat"),
             ),
           ],
         );
