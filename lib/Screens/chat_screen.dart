@@ -1,12 +1,11 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:groupie/main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/message_tile.dart';
 import 'package:groupie/Screens/group_info_screen.dart';
 import 'package:groupie/services/database_service.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Chatscreen extends StatefulWidget {
@@ -27,7 +26,7 @@ class Chatscreen extends StatefulWidget {
 class _ChatscreenState extends State<Chatscreen> {
   Stream? chats;
   String admin = "";
-  TextEditingController messagecontroller = TextEditingController();
+  final TextEditingController messagecontroller = TextEditingController();
 
   @override
   void initState() {
@@ -35,7 +34,7 @@ class _ChatscreenState extends State<Chatscreen> {
     getadminandchats();
   }
 
-  getadminandchats() {
+  void getadminandchats() {
     Databaseservice().getchat(widget.groupId).then((value) {
       setState(() {
         chats = value;
@@ -48,7 +47,7 @@ class _ChatscreenState extends State<Chatscreen> {
     });
   }
 
-  firebaseshownotification() {
+  void firebaseshownotification() {
     if (kDebugMode) print("Notification Sended");
 
     flutterLocalNotificationsPlugin.show(
@@ -113,45 +112,37 @@ class _ChatscreenState extends State<Chatscreen> {
                       controller: messagecontroller,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
-                        hintText: "Send a message...",
-                        hintStyle: TextStyle(
-                          color: Colors.white,
-                        ),
                         border: InputBorder.none,
+                        hintText: "Send a message...",
+                        hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
                   const SizedBox(width: 15),
                   GestureDetector(
-                    onTap: () {
-                      sendmessage();
-                      // firebaseshownotification();
-                    },
+                    onTap: () => sendmessage(),
                     child: Container(
-                      height: 50,
                       width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         color: Constants().primarycolor,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Center(
-                        child: Icon(
-                          Icons.send,
-                          color: Colors.white,
-                        ),
+                        child: Icon(Icons.send, color: Colors.white),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  chatsandmessage() {
+  StreamBuilder chatsandmessage() {
     return StreamBuilder(
       stream: chats,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -175,7 +166,7 @@ class _ChatscreenState extends State<Chatscreen> {
     );
   }
 
-  sendmessage() {
+  void sendmessage() {
     if (messagecontroller.text.isNotEmpty) {
       Map<String, dynamic> chatmessagemap = {
         "Message": messagecontroller.text,

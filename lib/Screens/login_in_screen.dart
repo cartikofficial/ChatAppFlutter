@@ -93,7 +93,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                                   ).hasMatch(value!)
                                       ? null
-                                      : "Please enter correct Email";
+                                      : "Please enter a Valid Email";
                                 }
                               },
                             ),
@@ -164,7 +164,9 @@ class _LoginscreenState extends State<Loginscreen> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         nextpage(
-                                            context, const Registerscreen());
+                                          context,
+                                          const Registerscreen(),
+                                        );
                                       },
                                   ),
                                 ],

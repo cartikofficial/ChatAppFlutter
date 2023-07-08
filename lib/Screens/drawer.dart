@@ -17,7 +17,7 @@ class _UserdrawerState extends State<Userdrawer> {
   bool selectd = false;
   String username = "";
   String useremail = "";
-  Authservices authservices = Authservices();
+  final Authservices authservices = Authservices();
 
   @override
   void initState() {
@@ -56,22 +56,20 @@ class _UserdrawerState extends State<Userdrawer> {
           ),
           ListTile(
             onTap: () {},
-            leading: const Icon(Icons.group),
             selected: true,
+            leading: const Icon(Icons.group),
             selectedColor: Constants().primarycolor,
             title: const Text("Group", style: TextStyle(color: Colors.black)),
           ),
           const Divider(height: 2),
           ListTile(
-            onTap: () {
-              nextpage(
-                context,
-                Profilescreen(username: username, useremail: useremail),
-              );
-            },
+            onTap: () => nextpage(
+              context,
+              Profilescreen(username: username, useremail: useremail),
+            ),
             selected: selectd,
-            leading: const Icon(Icons.account_box_sharp),
             selectedColor: Constants().primarycolor,
+            leading: const Icon(Icons.account_box_sharp),
             title: const Text("Profile", style: TextStyle(color: Colors.black)),
           ),
           const Divider(height: 2),
@@ -96,11 +94,11 @@ class _UserdrawerState extends State<Userdrawer> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () async {
-                          await authservices.signout(context).whenComplete(() {
-                            nextpagereplacement(context, const Loginscreen());
-                          });
-                        },
+                        onPressed: () async => await authservices
+                            .signout(context)
+                            .whenComplete(() {
+                          nextpagereplacement(context, const Loginscreen());
+                        }),
                         icon: const Icon(Icons.done, color: Colors.green),
                       ),
                     ],

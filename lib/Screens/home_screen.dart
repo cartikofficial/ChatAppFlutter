@@ -29,14 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     gettinguserdata();
   }
 
-  String getid(String res) {
-    return res.substring(0, res.indexOf("_"));
-  }
-
-  String getgrouopnamne(String res) {
-    return res.substring(res.indexOf("_") + 1);
-  }
-
   void getuserdata() async {
     await Sharedprefererncedata.getusername().then((value) {
       setState(() => username = value!);
@@ -53,6 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String getid(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  String getgrouopnamne(String res) {
+    return res.substring(res.indexOf("_") + 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,9 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              nextpage(context, const Searchpage());
-            },
+            onPressed: () => nextpage(context, const Searchpage()),
             icon: const Icon(Icons.search),
           ),
         ],
@@ -212,12 +210,10 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () {
-              popUpDialoge(context);
-            },
+            onTap: () => popUpDialoge(context),
             child: Icon(
-              Icons.add_circle,
               size: 80,
+              Icons.add_circle,
               color: Colors.grey[700],
             ),
           ),

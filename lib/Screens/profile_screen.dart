@@ -1,18 +1,26 @@
-// ignore_for_file: must_be_immutable
-
-import 'package:groupie/Screens/home_screen.dart';
-import 'package:groupie/Screens/login_in_screen.dart';
 import '../widgets/widget.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_services.dart';
 import 'package:groupie/shared/constants.dart';
+import 'package:groupie/Screens/home_screen.dart';
+import 'package:groupie/Screens/login_in_screen.dart';
 
-class Profilescreen extends StatelessWidget {
-  String username;
-  String useremail;
-  Profilescreen({super.key, required this.username, required this.useremail});
+class Profilescreen extends StatefulWidget {
+  final String username;
+  final String useremail;
 
-  Authservices authservices = Authservices();
+  const Profilescreen({
+    super.key,
+    required this.username,
+    required this.useremail,
+  });
+
+  @override
+  State<Profilescreen> createState() => _ProfilescreenState();
+}
+
+class _ProfilescreenState extends State<Profilescreen> {
+  final Authservices authservices = Authservices();
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +34,8 @@ class Profilescreen extends StatelessWidget {
               currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage("assets/images/jassmanak.png"),
               ),
-              accountName: Text(username),
-              accountEmail: Text(useremail),
+              accountName: Text(widget.username),
+              accountEmail: Text(widget.useremail),
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/backimage.png"),
@@ -35,15 +43,10 @@ class Profilescreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              onTap: () {
-                nextpagereplacement(context, const HomeScreen());
-              },
+              onTap: () => nextpagereplacement(context, const HomeScreen()),
               leading: const Icon(Icons.group),
               selectedColor: Constants().primarycolor,
-              title: const Text(
-                "Group",
-                style: TextStyle(color: Colors.black),
-              ),
+              title: const Text("Group", style: TextStyle(color: Colors.black)),
             ),
             const Divider(height: 2),
             ListTile(
@@ -69,26 +72,19 @@ class Profilescreen extends StatelessWidget {
                       content: const Text("Are you sure, you want to logout!"),
                       actions: [
                         IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
+                          onPressed: () => Navigator.pop(context),
                           icon: Icon(
                             Icons.cancel,
                             color: Constants().primarycolor,
                           ),
                         ),
                         IconButton(
-                          onPressed: () async {
-                            await authservices
-                                .signout(context)
-                                .whenComplete(() {
-                              nextpage(context, const Loginscreen());
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
+                          onPressed: () async => await authservices
+                              .signout(context)
+                              .whenComplete(() {
+                            nextpage(context, const Loginscreen());
+                          }),
+                          icon: const Icon(Icons.done, color: Colors.green),
                         ),
                       ],
                     );
@@ -119,15 +115,15 @@ class Profilescreen extends StatelessWidget {
         child: Column(
           children: [
             const CircleAvatar(
-              backgroundImage: AssetImage("assets/images/jassmanak.png"),
               radius: 70,
+              backgroundImage: AssetImage("assets/images/jassmanak.png"),
             ),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text("Full Name : ", style: TextStyle(fontSize: 17)),
-                Text(username, style: const TextStyle(fontSize: 17)),
+                Text(widget.username, style: const TextStyle(fontSize: 17)),
               ],
             ),
             const Divider(height: 20, thickness: 1.1),
@@ -135,7 +131,7 @@ class Profilescreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text("Email : ", style: TextStyle(fontSize: 17)),
-                Text(useremail, style: const TextStyle(fontSize: 17)),
+                Text(widget.useremail, style: const TextStyle(fontSize: 17)),
               ],
             ),
           ],
