@@ -58,7 +58,6 @@ class _ChatscreenState extends State<Chatscreen> {
         android: AndroidNotificationDetails(
           chanel.id,
           chanel.name,
-          chanel.description,
           importance: Importance.high,
           color: Colors.redAccent,
           playSound: true,
@@ -78,16 +77,14 @@ class _ChatscreenState extends State<Chatscreen> {
         backgroundColor: Constants().primarycolor,
         actions: [
           IconButton(
-            onPressed: () {
-              nextpage(
-                context,
-                Groupinfowidget(
-                  adminname: widget.username,
-                  groupId: widget.groupId,
-                  groupname: widget.groupname,
-                ),
-              );
-            },
+            onPressed: () => nextpage(
+              context,
+              Groupinfowidget(
+                groupId: widget.groupId,
+                adminname: widget.username,
+                groupname: widget.groupname,
+              ),
+            ),
             icon: const Icon(Icons.info),
           ),
         ],
@@ -151,14 +148,12 @@ class _ChatscreenState extends State<Chatscreen> {
           child: snapshot.hasData
               ? ListView.builder(
                   itemCount: snapshot.data.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Messagetile(
-                      message: snapshot.data.docs[index]["Message"],
-                      sender: snapshot.data.docs[index]["Sender"],
-                      sendedbyme: widget.username ==
-                          snapshot.data.docs[index]['Sender'],
-                    );
-                  },
+                  itemBuilder: (BuildContext context, int index) => Messagetile(
+                    message: snapshot.data.docs[index]["Message"],
+                    sender: snapshot.data.docs[index]["Sender"],
+                    sendedbyme:
+                        widget.username == snapshot.data.docs[index]['Sender'],
+                  ),
                 )
               : Container(),
         );
@@ -169,8 +164,8 @@ class _ChatscreenState extends State<Chatscreen> {
   void sendmessage() {
     if (messagecontroller.text.isNotEmpty) {
       Map<String, dynamic> chatmessagemap = {
-        "Message": messagecontroller.text,
-        "Sender": widget.username,
+        "Message": messagecontroller.text.toString().trim(),
+        "Sender": widget.username.trim(),
         "Time": DateTime.now().microsecondsSinceEpoch,
       };
       Databaseservice().sendmessage(widget.groupId, chatmessagemap);

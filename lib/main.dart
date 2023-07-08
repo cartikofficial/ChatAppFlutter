@@ -11,7 +11,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 AndroidNotificationChannel chanel = const AndroidNotificationChannel(
   "Very_important_Message",
   "name",
-  "description",
   importance: Importance.high,
   playSound: true,
 );
@@ -90,7 +89,7 @@ class _MainAppState extends State<MainApp> {
             android: AndroidNotificationDetails(
               chanel.id,
               chanel.name,
-              chanel.description,
+              // chanel.description,
               color: Colors.red,
               playSound: true,
               icon: "assets/images/Logo.png",
@@ -127,9 +126,7 @@ class _MainAppState extends State<MainApp> {
   userlogeinstatus() async {
     await Sharedprefererncedata.getuserlogedinstatus().then((value) {
       if (value != null) {
-        setState(() {
-          issignedin = value;
-        });
+        setState(() => issignedin = value);
       }
     });
   }
@@ -137,6 +134,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Groupie",
       theme: ThemeData(
         primaryColor: Constants().primarycolor,
         scaffoldBackgroundColor: Colors.white,
