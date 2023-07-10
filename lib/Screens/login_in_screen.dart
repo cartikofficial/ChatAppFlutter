@@ -232,15 +232,12 @@ class _LoginscreenState extends State<Loginscreen> {
   }
 
   void googlesignin(context) async {
-    await Authservices().signinwithgoogle(context).then((value) async {
-      setState(() => isloading = true);
-      if (value == true) {
-        await Sharedprefererncedata.saveuserlogedinstatus(true);
-
-        nextpagereplacement(context, const HomeScreen());
-      }
-      setState(() => isloading = false);
-      return null;
-    });
+    await Authservices().signinwithgoogle(context).then(
+      (value) async {
+        if (value == true) {
+          nextpagereplacement(context, const HomeScreen());
+        }
+      },
+    );
   }
 }
