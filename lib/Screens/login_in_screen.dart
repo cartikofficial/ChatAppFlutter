@@ -57,7 +57,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     top: 5,
                                     left: 20,
                                     right: 20,
-                                    bottom: 15,
+                                    bottom: 20,
                                   ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
