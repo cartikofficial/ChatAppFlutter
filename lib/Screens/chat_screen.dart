@@ -151,8 +151,8 @@ class _ChatscreenState extends State<Chatscreen> {
                   itemBuilder: (BuildContext context, int index) => Messagetile(
                     message: snapshot.data.docs[index]["Message"],
                     sender: snapshot.data.docs[index]["Sender"],
-                    sendedbyme:
-                        widget.username == snapshot.data.docs[index]['Sender'],
+                    sendedbyme: widget.username.trim() ==
+                        snapshot.data.docs[index]['Sender'],
                   ),
                 )
               : Container(),

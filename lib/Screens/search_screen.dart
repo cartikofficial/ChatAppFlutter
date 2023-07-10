@@ -15,14 +15,14 @@ class Searchpage extends StatefulWidget {
 }
 
 class _SearchpageState extends State<Searchpage> {
-  TextEditingController searchcontroller = TextEditingController();
-  bool isloading = false;
-  QuerySnapshot? searchsnapshot;
-  bool hasusersearched = false;
+  User? user;
   String username = "";
   bool isjoined = false;
-  User? user;
+  bool isloading = false;
+  bool hasusersearched = false;
+  QuerySnapshot? searchsnapshot;
   final ValueNotifier<bool> toogle = ValueNotifier<bool>(true);
+  final TextEditingController searchcontroller = TextEditingController();
 
   @override
   void initState() {
@@ -53,8 +53,8 @@ class _SearchpageState extends State<Searchpage> {
           "Search",
           style: TextStyle(
             fontSize: 25,
-            fontWeight: FontWeight.bold,
             color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -87,9 +87,7 @@ class _SearchpageState extends State<Searchpage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    iniatiatesearchmethod();
-                  },
+                  onTap: () => iniatiatesearchmethod(),
                   child: Container(
                     height: 40,
                     width: 40,
@@ -121,16 +119,15 @@ class _SearchpageState extends State<Searchpage> {
 
   iniatiatesearchmethod() async {
     if (searchcontroller.text.isNotEmpty) {
-      setState(() {
-        isloading = true;
-      });
+      setState(() => isloading = true);
+
       await Databaseservice()
           .searchgroupnames(searchcontroller.text)
           .then((snapshot) {
         setState(() {
-          searchsnapshot = snapshot;
           isloading = false;
           hasusersearched = true;
+          searchsnapshot = snapshot;
         });
       });
     }
@@ -159,14 +156,17 @@ class _SearchpageState extends State<Searchpage> {
         .isuserjoined(groupname, groupid, username)
         .then((value) {
       toogle.value = value;
-      setState(() {
-        isjoined = toogle.value;
-      });
+
+      setState(() => isjoined = toogle.value);
     });
   }
 
   Widget grouptile(
-      String username, String groupid, String groupname, String adminname) {
+    String username,
+    String groupid,
+    String groupname,
+    String adminname,
+  ) {
     // Function to checking that the user has alredy logined or not
     joinedornot(username, groupid, groupname, adminname);
     return ListTile(
@@ -216,7 +216,7 @@ class _SearchpageState extends State<Searchpage> {
             Future.delayed(
               const Duration(seconds: 2),
               () {
-                nextpage(
+                nextpagereplacement(
                   context,
                   Chatscreen(
                     username: username,

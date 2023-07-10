@@ -5,11 +5,12 @@ class Messagetile extends StatefulWidget {
   final String message;
   final String sender;
   final bool sendedbyme;
-  const Messagetile(
-      {super.key,
-      required this.message,
-      required this.sender,
-      required this.sendedbyme});
+  const Messagetile({
+    super.key,
+    required this.message,
+    required this.sender,
+    required this.sendedbyme,
+  });
 
   @override
   State<Messagetile> createState() => _MessagetileState();

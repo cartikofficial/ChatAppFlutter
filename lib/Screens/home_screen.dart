@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  nongroupwidget() {
+  Container nongroupwidget() {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
