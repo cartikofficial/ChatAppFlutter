@@ -11,7 +11,7 @@ class Databaseservice {
       FirebaseFirestore.instance.collection("User_groups");
 
   // Saving user data to Firestore Database
-  Future savinguserdata(String name, String email) async {
+  Future savinguserdata(String? name, String? email) async {
     return await usercollection.doc(uid).set({
       "Name": name,
       "Email": email,
@@ -30,7 +30,7 @@ class Databaseservice {
     // return await usercollection.where("Email", isEqualTo: email).get();
   }
 
-  // Getting Users group data
+  // Getting User Groups data
   Future getusergroups() async {
     return usercollection.doc(uid).snapshots();
   }
@@ -59,7 +59,7 @@ class Databaseservice {
     });
   }
 
-  // Get Chats from database
+  // Getting Chats from database
   Future getchat(String groupId) async {
     return groupcollection
         .doc(groupId)
@@ -68,13 +68,13 @@ class Databaseservice {
         .snapshots();
   }
 
-  // Get group Admin
+  // Getting Group Admin
   Future getgroupAdmin(String groupId) async {
     DocumentReference d = groupcollection.doc(groupId);
     return d.collection("Admin").snapshots();
   }
 
-  // Get group members
+  // Get Group members
   getgroupmembers(groupId) async {
     return groupcollection.doc(groupId).snapshots();
   }
@@ -88,11 +88,7 @@ class Databaseservice {
   Future isuserjoined(String groupname, String groupid, String username) async {
     DocumentSnapshot documendSnapshot = await usercollection.doc(uid).get();
     List<dynamic> groups = await documendSnapshot["Groups"];
-    if (groups.contains("${groupid}_$groupname")) {
-      return true;
-    } else {
-      return false;
-    }
+    return groups.contains("${groupid}_$groupname") ? true : false;
   }
 
   // Toggeling the group entry and exit
@@ -125,7 +121,10 @@ class Databaseservice {
   }
 
   // Sendmessage
-  sendmessage(String groupid, Map<String, dynamic> chatmessagesdata) async {
+  void sendmessage(
+    String groupid,
+    Map<String, dynamic> chatmessagesdata,
+  ) async {
     groupcollection
         .doc(groupid)
         .collection("User_messages")
@@ -133,7 +132,7 @@ class Databaseservice {
     groupcollection.doc(groupid).update({
       "Recent message": chatmessagesdata["Message"],
       "Recent message sender": chatmessagesdata["Sender"],
-      "Recent message time": chatmessagesdata["Time"].toString(),
+      "Recent message time": chatmessagesdata["Time"],
     });
   }
 }

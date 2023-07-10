@@ -44,7 +44,7 @@ class _GrouptileState extends State<Grouptile> {
               style: const TextStyle(
                 fontSize: 25,
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,     
               ),
             ),
           ),

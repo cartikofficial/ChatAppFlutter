@@ -25,6 +25,7 @@ class _ProfilescreenState extends State<Profilescreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Drawer
       drawer: Drawer(
         child: ListView(
           padding: const EdgeInsets.all(0),
@@ -82,7 +83,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                           onPressed: () async => await authservices
                               .signout(context)
                               .whenComplete(() {
-                            nextpage(context, const Loginscreen());
+                            nextpagereplacement(context, const Loginscreen());
                           }),
                           icon: const Icon(Icons.done, color: Colors.green),
                         ),
@@ -101,17 +102,19 @@ class _ProfilescreenState extends State<Profilescreen> {
           ],
         ),
       ),
+
+      // Appbar
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Constants().primarycolor,
         title: const Text(
           "Profile",
-          style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
       ),
       body: Container(
-        padding: const EdgeInsets.all(30),
         width: double.infinity,
+        padding: const EdgeInsets.all(25),
         child: Column(
           children: [
             const CircleAvatar(
@@ -120,18 +123,24 @@ class _ProfilescreenState extends State<Profilescreen> {
             ),
             const SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text("Full Name : ", style: TextStyle(fontSize: 17)),
-                Text(widget.username, style: const TextStyle(fontSize: 17)),
+                const Text(
+                  "Full Name: ",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+                Text(widget.username, style: const TextStyle(fontSize: 16)),
               ],
             ),
-            const Divider(height: 20, thickness: 1.1),
+            const Divider(height: 20, thickness: 1),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text("Email : ", style: TextStyle(fontSize: 17)),
-                Text(widget.useremail, style: const TextStyle(fontSize: 17)),
+                const Text(
+                  "Email: ",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+                Text(widget.useremail, style: const TextStyle(fontSize: 16)),
               ],
             ),
           ],

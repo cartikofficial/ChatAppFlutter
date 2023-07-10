@@ -35,23 +35,24 @@ class _MessagetileState extends State<Messagetile> {
             : const EdgeInsets.only(right: 60),
         padding: const EdgeInsets.only(
           top: 12,
-          bottom: 12,
           left: 10,
           right: 10,
+          bottom: 12,
         ),
         decoration: BoxDecoration(
-            borderRadius: widget.sendedbyme
-                ? const BorderRadius.only(
-                    topRight: Radius.circular(22),
-                    topLeft: Radius.circular(22),
-                    bottomLeft: Radius.circular(22),
-                  )
-                : const BorderRadius.only(
-                    topRight: Radius.circular(22),
-                    topLeft: Radius.circular(22),
-                    bottomRight: Radius.circular(22),
-                  ),
-            color: Constants().primarycolor),
+          borderRadius: widget.sendedbyme
+              ? const BorderRadius.only(
+                  topRight: Radius.circular(22),
+                  topLeft: Radius.circular(22),
+                  bottomLeft: Radius.circular(22),
+                )
+              : const BorderRadius.only(
+                  topRight: Radius.circular(22),
+                  topLeft: Radius.circular(22),
+                  bottomRight: Radius.circular(22),
+                ),
+          color: Constants().primarycolor,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

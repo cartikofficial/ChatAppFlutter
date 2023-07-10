@@ -10,8 +10,12 @@ class Authservices {
   FirebaseAuth firebaseauath = FirebaseAuth.instance;
 
   // Register
-  Future registeruserwithemailandpassword(
-      String name, String email, String password, context) async {
+  Future<bool> registeruserwithemailandpassword(
+    String name,
+    String email,
+    String password,
+    context,
+  ) async {
     try {
       // UserCredential is a Username and Password authentication token that is bound to a particular user
       UserCredential userCredential =
@@ -19,17 +23,24 @@ class Authservices {
         email: email,
         password: password,
       );
+
       await Databaseservice(uid: userCredential.user?.uid)
           .savinguserdata(name, email);
+
       return true;
     } on FirebaseAuthException catch (e) {
       showsnackbar(context, Colors.red, e);
     }
+
+    return false;
   }
 
   // Login
-  Future signinuserwithemailandpassword(
-      String email, String password, context) async {
+  Future<bool> signinuserwithemailandpassword(
+    String email,
+    String password,
+    context,
+  ) async {
     try {
       await firebaseauath.signInWithEmailAndPassword(
         email: email,
@@ -39,36 +50,41 @@ class Authservices {
     } on FirebaseAuthException catch (e) {
       showsnackbar(context, Colors.red, e);
     }
+
+    return false;
   }
 
   // Google Signin
-  Future signinwithgoogle() async {
+  Future<bool> signinwithgoogle(context) async {
     try {
       final GoogleSignInAccount? googleuser = await GoogleSignIn().signIn();
       if (googleuser != null) {
         GoogleSignInAuthentication googleauth = await googleuser.authentication;
-        GoogleAuthProvider.credential(
+
+        final OAuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleauth.accessToken,
           idToken: googleauth.idToken,
         );
-        // UserCredential userCredential = await auth.signInWithCredential(
-        //   credential,
-        // );
-        // We can also write code in this way
-        // UserCredential userCredential = await auth.signInWithCredential(
-        //   GoogleAuthProvider.credential(
-        //     accessToken: googleauth.accessToken,
-        //     idToken: googleauth.idToken,
-        //   ),
-        // );
+
+        UserCredential usercredential =
+            await firebaseauath.signInWithCredential(credential);
+
+        await Databaseservice(uid: usercredential.user!.uid).savinguserdata(
+          usercredential.user!.email,
+          usercredential.user!.displayName,
+        );
+
+        Sharedprefererncedata.saveuseremail(usercredential.user!.email);
+        Sharedprefererncedata.saveusername(usercredential.user!.displayName);
+
         return true;
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      if (kDebugMode) print(e.toString());
+      showsnackbar(context, Colors.red, e);
     }
-    return null;
+
+    return false;
   }
 
   // Sign-out

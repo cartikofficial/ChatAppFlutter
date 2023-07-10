@@ -39,9 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await Databaseservice(uid: FirebaseAuth.instance.currentUser!.uid)
         .getusergroups()
         .then((snapshot) {
-      setState(() {
-        groups = snapshot;
-      });
+      setState(() => groups = snapshot);
     });
   }
 
@@ -71,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+
+      // Body
       body: isloading
           ? Center(
               child: CircularProgressIndicator(color: Constants().primarycolor),
@@ -82,6 +82,43 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Constants().primarycolor,
         child: const Icon(Icons.add, size: 35),
       ),
+    );
+  }
+
+  StreamBuilder<dynamic> grouplist() {
+    return StreamBuilder(
+      stream: groups,
+      initialData: null,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data["Groups"] != null) {
+            if (snapshot.data["Groups"].length != 0) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data["Groups"].length,
+                itemBuilder: (context, index) {
+                  int reverseindex = snapshot.data['Groups'].length - index - 1;
+                  return Grouptile(
+                    username: username,
+                    groupId: getid(snapshot.data["Groups"][reverseindex]),
+                    groupname: getgrouopnamne(
+                      snapshot.data["Groups"][reverseindex],
+                    ),
+                  );
+                },
+              );
+            } else {
+              return nongroupwidget();
+            }
+          } else {
+            return nongroupwidget();
+          }
+        } else {
+          return Center(
+            child: CircularProgressIndicator(color: Constants().primarycolor),
+          );
+        }
+      },
     );
   }
 
@@ -140,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       .creategroup(
                     username,
                     FirebaseAuth.instance.currentUser!.uid,
-                    groupname,
+                    groupname.trim(),
                   )
                       .whenComplete(() {
                     setState(() => isloading = false);
@@ -161,43 +198,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         );
-      },
-    );
-  }
-
-  StreamBuilder<dynamic> grouplist() {
-    return StreamBuilder(
-      stream: groups,
-      initialData: null,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data["Groups"] != null) {
-            if (snapshot.data["Groups"].length != 0) {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data["Groups"].length,
-                itemBuilder: (context, index) {
-                  int reverseindex = snapshot.data['Groups'].length - index - 1;
-                  return Grouptile(
-                    username: username,
-                    groupId: getid(snapshot.data["Groups"][reverseindex]),
-                    groupname: getgrouopnamne(
-                      snapshot.data["Groups"][reverseindex],
-                    ),
-                  );
-                },
-              );
-            } else {
-              return nongroupwidget();
-            }
-          } else {
-            return nongroupwidget();
-          }
-        } else {
-          return Center(
-            child: CircularProgressIndicator(color: Constants().primarycolor),
-          );
-        }
       },
     );
   }

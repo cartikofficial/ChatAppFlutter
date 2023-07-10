@@ -1,12 +1,9 @@
-import 'package:groupie/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/message_tile.dart';
 import 'package:groupie/Screens/group_info_screen.dart';
 import 'package:groupie/services/database_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Chatscreen extends StatefulWidget {
   final String username;
@@ -47,25 +44,25 @@ class _ChatscreenState extends State<Chatscreen> {
     });
   }
 
-  void firebaseshownotification() {
-    if (kDebugMode) print("Notification Sended");
+  // void firebaseshownotification() {
+  //   if (kDebugMode) print("Notification Sended");
 
-    flutterLocalNotificationsPlugin.show(
-      1,
-      "this notificatio is sended by $admin",
-      "How's your day",
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          chanel.id,
-          chanel.name,
-          importance: Importance.high,
-          color: Colors.redAccent,
-          playSound: true,
-          icon: "assets/images/Logo.png",
-        ),
-      ),
-    );
-  }
+  //   flutterLocalNotificationsPlugin.show(
+  //     1,
+  //     "this notificatio is sended by $admin",
+  //     "How's your day",
+  //     NotificationDetails(
+  //       android: AndroidNotificationDetails(
+  //         chanel.id,
+  //         chanel.name,
+  //         importance: Importance.high,
+  //         color: Colors.redAccent,
+  //         playSound: true,
+  //         icon: "assets/images/Logo.png",
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -166,9 +163,11 @@ class _ChatscreenState extends State<Chatscreen> {
       Map<String, dynamic> chatmessagemap = {
         "Message": messagecontroller.text.toString().trim(),
         "Sender": widget.username.trim(),
-        "Time": DateTime.now().microsecondsSinceEpoch,
+        "Time": DateTime.now().microsecondsSinceEpoch.toString().trim(),
       };
+
       Databaseservice().sendmessage(widget.groupId, chatmessagemap);
+
       setState(() {
         messagecontroller.clear();
       });

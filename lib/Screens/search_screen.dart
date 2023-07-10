@@ -30,7 +30,7 @@ class _SearchpageState extends State<Searchpage> {
     getusernameandId();
   }
 
-  getusernameandId() async {
+  void getusernameandId() async {
     await Sharedprefererncedata.getusername().then((value) {
       setState(() {
         username = value!;
@@ -45,84 +45,88 @@ class _SearchpageState extends State<Searchpage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Constants().primarycolor,
-        title: const Text(
-          "Search",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Constants().primarycolor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Constants().primarycolor,
+            title: const Text(
+              "Search",
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchcontroller,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      hintText: "Search Groups....",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                      border: InputBorder.none,
-                    ),
+          ),
+          body: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Constants().primarycolor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => iniatiatesearchmethod(),
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: searchcontroller,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
+                          hintText: "Search Groups....",
+                          hintStyle: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            ),
+                    GestureDetector(
+                      onTap: () => iniatiatesearchmethod(),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Icon(Icons.search, color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              isloading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Constants().primarycolor,
+                      ),
+                    )
+                  : hasusersearched
+                      ? grouplist()
+                      : const SizedBox(),
+            ],
           ),
-          const SizedBox(height: 20),
-          isloading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: Constants().primarycolor,
-                  ),
-                )
-              : grouplist(),
-        ],
+        ),
       ),
     );
   }
 
-  iniatiatesearchmethod() async {
+  void iniatiatesearchmethod() async {
     if (searchcontroller.text.isNotEmpty) {
       setState(() => isloading = true);
 
       await Databaseservice()
-          .searchgroupnames(searchcontroller.text)
+          .searchgroupnames(searchcontroller.text.toString().trim())
           .then((snapshot) {
         setState(() {
           isloading = false;
@@ -134,7 +138,7 @@ class _SearchpageState extends State<Searchpage> {
   }
 
   grouplist() {
-    return hasusersearched
+    return searchsnapshot!.docs.isNotEmpty
         ? ListView.builder(
             shrinkWrap: true,
             itemCount: searchsnapshot!.docs.length,
@@ -145,15 +149,29 @@ class _SearchpageState extends State<Searchpage> {
                 searchsnapshot!.docs[index]["Groupname"],
                 searchsnapshot!.docs[index]["Admin"],
               );
-            },
-          )
-        : const SizedBox();
+            })
+        : Text(
+            textAlign: TextAlign.center,
+            "Group not found, please check the group name",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey.withOpacity(0.8),
+            ),
+          );
   }
 
-  joinedornot(String username, String groupid, String groupname,
-      String adminname) async {
+  void joinedornot(
+    String username,
+    String groupid,
+    String groupname,
+    String adminname,
+  ) async {
     await Databaseservice(uid: user!.uid)
-        .isuserjoined(groupname, groupid, username)
+        .isuserjoined(
+      groupname,
+      groupid,
+      username,
+    )
         .then((value) {
       toogle.value = value;
 
@@ -189,8 +207,11 @@ class _SearchpageState extends State<Searchpage> {
       ),
       trailing: InkWell(
         onTap: () async {
-          Databaseservice(uid: user!.uid)
-              .togglejoingroup(groupid, username, groupname);
+          Databaseservice(uid: user!.uid).togglejoingroup(
+            groupid,
+            username,
+            groupname,
+          );
           if (isjoined) {
             setState(() {
               isjoined = !isjoined;
@@ -234,8 +255,10 @@ class _SearchpageState extends State<Searchpage> {
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 22,
+                  vertical: 12,
+                ),
                 child: const Text(
                   "Joined",
                   style: TextStyle(color: Colors.white),
@@ -246,8 +269,10 @@ class _SearchpageState extends State<Searchpage> {
                   color: Constants().primarycolor,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 12,
+                ),
                 child: const Text(
                   "Join now",
                   style: TextStyle(color: Colors.white),

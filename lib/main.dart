@@ -5,26 +5,24 @@ import 'package:groupie/Screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:groupie/Screens/login_in_screen.dart';
 import 'package:groupie/services/shared_preferences.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-AndroidNotificationChannel chanel = const AndroidNotificationChannel(
-  "Very_important_Message",
-  "name",
-  importance: Importance.high,
-  playSound: true,
-);
+// // AndroidNotificationChannel chanel = const AndroidNotificationChannel(
+//   "Very_important_Message",
+//   "name",
+//   importance: Importance.high,
+//   playSound: true,
+// );
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
-Future firebasemessagingbackground(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  if (kDebugMode) {
-    print("Message is :-  $message");
-  }
-  return Text("$message");
-}
+// Future firebasemessagingbackground(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   if (kDebugMode) print("Message is :-  $message");
+//   return Text("$message");
+// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,16 +48,16 @@ Future<void> main() async {
   //   (message) => firebasemessagingbackground(message),
   // );
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(chanel);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(chanel);
 
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
   runApp(const MainApp());
 }
 
@@ -77,53 +75,51 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     userlogeinstatus();
-    FirebaseMessaging.onMessage.listen((RemoteMessage messages) {
-      RemoteNotification? notification = messages.notification;
-      AndroidNotification? androidNotification = messages.notification?.android;
-      if (notification != null && androidNotification != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              chanel.id,
-              chanel.name,
-              // chanel.description,
-              color: Colors.red,
-              playSound: true,
-              icon: "assets/images/Logo.png",
-            ),
-          ),
-        );
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage messages) {
-      RemoteNotification? notification = messages.notification;
-      AndroidNotification? androidNotification = messages.notification?.android;
-      if (notification != null && androidNotification != null) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("${notification.title}"),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("${notification.body}"),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      }
-    });
   }
+  // FirebaseMessaging.onMessage.listen((RemoteMessage messages) {
+  //   RemoteNotification? notification = messages.notification;
+  //   AndroidNotification? androidNotification = messages.notification?.android;
+  //   if (notification != null && androidNotification != null) {
+  //     flutterLocalNotificationsPlugin.show(
+  //       notification.hashCode,
+  //       notification.title,
+  //       notification.body,
+  //       NotificationDetails(
+  //         android: AndroidNotificationDetails(
+  //           chanel.id,
+  //           chanel.name,
+  //           // chanel.description,
+  //           color: Colors.red,
+  //           playSound: true,
+  //           icon: "assets/images/Logo.png",
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // });
 
-  userlogeinstatus() async {
+  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage messages) {
+  //   RemoteNotification? notification = messages.notification;
+  //   AndroidNotification? androidNotification = messages.notification?.android;
+  //   if (notification != null && androidNotification != null) {
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           title: Text("${notification.title}"),
+  //           content: SingleChildScrollView(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [Text("${notification.body}")],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   }
+  // });
+
+  void userlogeinstatus() async {
     await Sharedprefererncedata.getuserlogedinstatus().then((value) {
       if (value != null) {
         setState(() => issignedin = value);

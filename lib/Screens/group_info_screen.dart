@@ -27,22 +27,22 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
   @override
   void initState() {
     super.initState();
-    groupmembers();
+    getgroupmembers();
   }
 
-  void groupmembers() async {
-    Databaseservice(uid: FirebaseAuth.instance.currentUser!.uid)
-        .getgroupmembers(widget.groupId)
-        .then((value) {
+  void getgroupmembers() async {
+    Databaseservice(
+      uid: FirebaseAuth.instance.currentUser!.uid,
+    ).getgroupmembers(widget.groupId).then((value) {
       setState(() => members = value);
     });
   }
 
-  String getname(String r) {
+  String getName(String r) {
     return r.substring(r.indexOf("_") + 1);
   }
 
-  String getrId(String id) {
+  String getId(String id) {
     return id.substring(0, id.indexOf("_"));
   }
 
@@ -67,9 +67,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                     ),
                     actions: [
                       IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                         icon: Icon(
                           Icons.cancel,
                           color: Constants().primarycolor,
@@ -82,7 +80,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                           )
                               .togglejoingroup(
                             widget.groupId,
-                            getname(widget.adminname),
+                            getName(widget.adminname),
                             widget.groupname,
                           )
                               .whenComplete(() {
@@ -130,7 +128,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Groups:  ${widget.groupname}",
+                        "Groups: ${widget.groupname}",
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 5),
@@ -176,8 +174,8 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                           ),
                         ),
                       ),
-                      title: Text(getname(snapshot.data["Members"][index])),
-                      subtitle: Text(getrId(snapshot.data["Members"][index])),
+                      title: Text(getName(snapshot.data["Members"][index])),
+                      subtitle: Text(getId(snapshot.data["Members"][index])),
                     ),
                   );
                 },
