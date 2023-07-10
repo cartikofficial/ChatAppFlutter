@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import 'home_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -41,24 +39,17 @@ class _LoginscreenState extends State<Loginscreen> {
                   ),
                 )
               : Scaffold(
-                  body: SingleChildScrollView(
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
+                  body: Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 500),
                         alignment: Alignment.center,
                         child: Form(
                           key: formkey,
                           child: Padding(
-                            padding: kIsWeb
-                                ? const EdgeInsets.only(bottom: 30)
-                                : const EdgeInsets.only(
-                                    top: 5,
-                                    left: 20,
-                                    right: 20,
-                                    bottom: 20,
-                                  ),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,7 +71,9 @@ class _LoginscreenState extends State<Loginscreen> {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
+                                const SizedBox(height: 30),
                                 Image.asset("assets/images/login.png"),
+                                const SizedBox(height: 30),
                                 TextFormField(
                                   keyboardType: TextInputType.emailAddress,
                                   textAlignVertical: TextAlignVertical.center,
@@ -106,7 +99,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     }
                                   },
                                 ),
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 20),
                                 ValueListenableBuilder(
                                   valueListenable: toogle,
                                   builder: (context, value, Widget? child) {
@@ -141,7 +134,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     );
                                   },
                                 ),
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 20),
                                 SizedBox(
                                   height: 40,
                                   width: double.infinity,
@@ -156,7 +149,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                     child: const Text("Login-in"),
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 15),
 
                                 // Google Sign-in
                                 ElevatedButton.icon(
@@ -168,7 +161,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                   label: const Text("Sign-in with Google"),
                                 ),
 
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 12),
                                 Text.rich(
                                   TextSpan(
                                     text: "Dont have an account? ",

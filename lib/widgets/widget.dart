@@ -18,9 +18,10 @@ void nextpage(context, page) {
 }
 
 void nextpagereplacement(context, page) {
-  Navigator.pushReplacement(
+  Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (context) => page),
+    (route) => false,
   );
 }
 

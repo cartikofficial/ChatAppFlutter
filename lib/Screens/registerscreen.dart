@@ -35,20 +35,17 @@ class _RegisterscreenState extends State<Registerscreen> {
                     color: Constants().primarycolor,
                   ),
                 )
-              : SingleChildScrollView(
-                  child: Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
+              : Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: SingleChildScrollView(
                     child: Container(
                       constraints: const BoxConstraints(maxWidth: 500),
                       alignment: Alignment.center,
                       child: Form(
                         key: formkey,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 20,
-                          ),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -70,7 +67,9 @@ class _RegisterscreenState extends State<Registerscreen> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
+                              const SizedBox(height: 10),
                               Image.asset("assets/images/register.png"),
+                              const SizedBox(height: 15),
                               TextFormField(
                                 textAlignVertical: TextAlignVertical.center,
                                 decoration: textinputdecopration.copyWith(
@@ -89,7 +88,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                                       : "name can't be empty";
                                 },
                               ),
-                              const SizedBox(height: 15),
+                              const SizedBox(height: 20),
                               TextFormField(
                                 keyboardType: TextInputType.emailAddress,
                                 textAlignVertical: TextAlignVertical.center,
@@ -111,7 +110,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                                       : "Please enter a valid value";
                                 },
                               ),
-                              const SizedBox(height: 15),
+                              const SizedBox(height: 20),
                               ValueListenableBuilder(
                                 valueListenable: toogle,
                                 builder: (context, value, child) {
@@ -148,7 +147,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                                   );
                                 },
                               ),
-                              const SizedBox(height: 15),
+                              const SizedBox(height: 20),
                               SizedBox(
                                 width: double.infinity,
                                 height: 40,
