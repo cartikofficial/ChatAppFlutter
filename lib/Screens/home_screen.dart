@@ -202,27 +202,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container nongroupwidget() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => popUpDialoge(context),
-            child: Icon(
-              size: 80,
-              Icons.add_circle,
-              color: Colors.grey[700],
+  Center nongroupwidget() {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => popUpDialoge(context),
+              child: Icon(
+                size: 80,
+                Icons.add_circle,
+                color: Colors.grey[700],
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            "you've not Joined any groups, tap on the add icon to creat a groups or you can also search from top search bar",
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 10),
+            const Text(
+              "you've not Joined any groups, tap on the add icon to creat a groups or you can also search from top search bar",
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

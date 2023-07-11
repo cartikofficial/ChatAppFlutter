@@ -32,165 +32,155 @@ class _LoginscreenState extends State<Loginscreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
         child: Scaffold(
-          body: isloading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: Constants().primarycolor,
-                  ),
-                )
-              : Scaffold(
-                  body: Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 500),
-                        alignment: Alignment.center,
-                        child: Form(
-                          key: formkey,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Groupie",
-                                  style: TextStyle(
-                                    fontSize: 40,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+          body: Scaffold(
+            body: Center(
+              // width: double.infinity,
+              // alignment: Alignment.center,
+              child: SingleChildScrollView(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  alignment: Alignment.center,
+                  child: Form(
+                    key: formkey,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Groupie",
+                            style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const Text(
+                            textAlign: TextAlign.center,
+                            "Login now to see what they are talking!",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Image.asset("assets/images/login.png"),
+                          const SizedBox(height: 30),
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: textinputdecopration.copyWith(
+                              labelText: "Email",
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: Constants().primarycolor,
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setState(() => email = value);
+                            },
+                            validator: (value) {
+                              if (value == "") {
+                                return "Please enter your Email";
+                              } else {
+                                return RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                                ).hasMatch(value!)
+                                    ? null
+                                    : "Please enter a Valid Email";
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          ValueListenableBuilder(
+                            valueListenable: toogle,
+                            builder: (context, value, Widget? child) {
+                              return TextFormField(
+                                obscureText: toogle.value,
+                                obscuringCharacter: "*",
+                                decoration: textinputdecopration.copyWith(
+                                  labelText: "Password",
+                                  prefixIcon: Icon(
+                                    Icons.lock,
+                                    color: Constants().primarycolor,
                                   ),
-                                ),
-                                const SizedBox(height: 15),
-                                const Text(
-                                  textAlign: TextAlign.center,
-                                  "Login now to see what they are talking!",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const SizedBox(height: 30),
-                                Image.asset("assets/images/login.png"),
-                                const SizedBox(height: 30),
-                                TextFormField(
-                                  keyboardType: TextInputType.emailAddress,
-                                  textAlignVertical: TextAlignVertical.center,
-                                  decoration: textinputdecopration.copyWith(
-                                    labelText: "Email",
-                                    prefixIcon: Icon(
-                                      Icons.email,
+                                  suffix: InkWell(
+                                    onTap: () => toogle.value = !toogle.value,
+                                    child: Icon(
+                                      toogle.value
+                                          ? Icons.visibility_rounded
+                                          : Icons.visibility_off_rounded,
                                       color: Constants().primarycolor,
                                     ),
                                   ),
-                                  onChanged: (value) {
-                                    setState(() => email = value);
-                                  },
-                                  validator: (value) {
-                                    if (value == "") {
-                                      return "Please enter your Email";
-                                    } else {
-                                      return RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                                      ).hasMatch(value!)
-                                          ? null
-                                          : "Please enter a Valid Email";
-                                    }
-                                  },
                                 ),
-                                const SizedBox(height: 20),
-                                ValueListenableBuilder(
-                                  valueListenable: toogle,
-                                  builder: (context, value, Widget? child) {
-                                    return TextFormField(
-                                      obscureText: toogle.value,
-                                      obscuringCharacter: "*",
-                                      decoration: textinputdecopration.copyWith(
-                                        labelText: "Password",
-                                        prefixIcon: Icon(
-                                          Icons.lock,
-                                          color: Constants().primarycolor,
-                                        ),
-                                        suffix: InkWell(
-                                          onTap: () =>
-                                              toogle.value = !toogle.value,
-                                          child: Icon(
-                                            toogle.value
-                                                ? Icons.visibility_rounded
-                                                : Icons.visibility_off_rounded,
-                                            color: Constants().primarycolor,
-                                          ),
-                                        ),
-                                      ),
-                                      validator: (value) {
-                                        return value!.isEmpty
-                                            ? "Enter your Password"
-                                            : null;
-                                      },
-                                      onChanged: (value) {
-                                        setState(() => password = value);
-                                      },
-                                    );
-                                  },
+                                validator: (value) {
+                                  return value!.isEmpty
+                                      ? "Enter your Password"
+                                      : null;
+                                },
+                                onChanged: (value) {
+                                  setState(() => password = value);
+                                },
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 40,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Constants().primarycolor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                const SizedBox(height: 20),
-                                SizedBox(
-                                  height: 40,
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Constants().primarycolor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                    onPressed: () => login(context),
-                                    child: const Text("Login-in"),
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
+                              ),
+                              onPressed: () => login(context),
+                              child: const Text("Login-in"),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
 
-                                // Google Sign-in
-                                ElevatedButton.icon(
-                                  style: const ButtonStyle(
-                                    enableFeedback: true,
-                                  ),
-                                  onPressed: () => googlesignin(context),
-                                  icon: const FaIcon(FontAwesomeIcons.google),
-                                  label: const Text("Sign-in with Google"),
-                                ),
+                          // Google Sign-in
+                          ElevatedButton.icon(
+                            style: const ButtonStyle(
+                              enableFeedback: true,
+                            ),
+                            onPressed: () => googlesignin(context),
+                            icon: const FaIcon(FontAwesomeIcons.google),
+                            label: const Text("Sign-in with Google"),
+                          ),
 
-                                const SizedBox(height: 12),
-                                Text.rich(
-                                  TextSpan(
-                                    text: "Dont have an account? ",
-                                    style: const TextStyle(fontSize: 13),
-                                    children: [
-                                      TextSpan(
-                                        text: "Register here",
-                                        style: const TextStyle(
-                                          decoration: TextDecoration.underline,
-                                        ),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            nextpage(
-                                              context,
-                                              const Registerscreen(),
-                                            );
-                                          },
-                                      ),
-                                    ],
+                          const SizedBox(height: 12),
+                          Text.rich(
+                            TextSpan(
+                              text: "Dont have an account? ",
+                              style: const TextStyle(fontSize: 13),
+                              children: [
+                                TextSpan(
+                                  text: "Register here",
+                                  style: const TextStyle(
+                                    decoration: TextDecoration.underline,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      nextpage(context, const Registerscreen());
+                                    },
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -198,7 +188,7 @@ class _LoginscreenState extends State<Loginscreen> {
 
   void login(context) {
     if (formkey.currentState!.validate()) {
-      setState(() => isloading = true);
+      showpopuploadingdialouge("Loading..", context);
 
       authservices
           .signinuserwithemailandpassword(
@@ -217,8 +207,6 @@ class _LoginscreenState extends State<Loginscreen> {
           await Sharedprefererncedata.saveuserlogedinstatus(true);
 
           nextpagereplacement(context, const HomeScreen());
-        } else {
-          setState(() => isloading = false);
         }
       });
     }
@@ -226,10 +214,8 @@ class _LoginscreenState extends State<Loginscreen> {
 
   void googlesignin(context) async {
     await Authservices().signinwithgoogle(context).then(
-      (value) async {
-        if (value == true) {
-          nextpagereplacement(context, const HomeScreen());
-        }
+      (value) {
+        value == true ? nextpagereplacement(context, const HomeScreen()) : null;
       },
     );
   }

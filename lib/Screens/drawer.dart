@@ -77,8 +77,8 @@ class _UserdrawerState extends State<Userdrawer> {
             onTap: () async {
               showDialog(
                 //if we click outside the box the box will not disapperar becausebarrierDismissible is false
-                barrierDismissible: false,
                 context: context,
+                barrierDismissible: false,
                 builder: (context) {
                   return AlertDialog(
                     title: const Text("Logout"),

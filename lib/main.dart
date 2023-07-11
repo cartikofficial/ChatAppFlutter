@@ -37,9 +37,7 @@ Future<void> main() async {
         appId: "1:329603254190:web:0c97034ba33ee2fe122a3f",
       ),
     );
-    if (kDebugMode) {
-      print("Firebase-Web Initialized");
-    }
+    if (kDebugMode) print("Firebase-Web Initialized");
   } else {
     await Firebase.initializeApp();
   }
@@ -58,6 +56,7 @@ Future<void> main() async {
   //   badge: true,
   //   sound: true,
   // );
+
   runApp(const MainApp());
 }
 
