@@ -6,8 +6,6 @@ import '../services/shared_preferences.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/services/auth_services.dart';
 import 'package:groupie/screens/registerscreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:groupie/services/database_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Loginscreen extends StatefulWidget {
@@ -66,6 +64,7 @@ class _LoginscreenState extends State<Loginscreen> {
                         Image.asset("assets/images/login.png"),
                         const SizedBox(height: 30),
                         TextFormField(
+                          cursorColor: primarycolor,
                           keyboardType: TextInputType.emailAddress,
                           textAlignVertical: TextAlignVertical.center,
                           decoration: textinputdecopration.copyWith(
@@ -95,6 +94,7 @@ class _LoginscreenState extends State<Loginscreen> {
                           valueListenable: toogle,
                           builder: (context, value, Widget? child) {
                             return TextFormField(
+                              cursorColor: primarycolor,
                               obscureText: toogle.value,
                               obscuringCharacter: "*",
                               decoration: textinputdecopration.copyWith(
@@ -194,12 +194,10 @@ class _LoginscreenState extends State<Loginscreen> {
       )
           .then((value) async {
         if (value == true) {
-          QuerySnapshot snapshot = await Databaseservice().gettinguserdata(
-            email,
-          );
+          // await Databaseservice().gettinguserdata();
 
           await Sharedprefererncedata.saveuseremail(email.trim());
-          await Sharedprefererncedata.saveusername(snapshot.docs[0]["Name"]);
+          // await Sharedprefererncedata.saveusername(snapshot.docs[0]["Name"]);
           await Sharedprefererncedata.saveuserlogedinstatus(true);
 
           nextpagereplacement(context, const HomeScreen());

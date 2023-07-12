@@ -15,14 +15,14 @@ class Sharedprefererncedata {
     return pref.setBool(logedinkey, userlogedin);
   }
 
-  static Future<bool?> saveusername(String? username) async {
+  static Future<bool?> saveusername(String username) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.setString(usernamekey, username!);
+    return pref.setString(usernamekey, username);
   }
 
-  static Future<bool?> saveuseremail(String? useremail) async {
+  static Future<bool?> saveuseremail(String useremail) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.setString(useremailkey, useremail!);
+    return pref.setString(useremailkey, useremail);
   }
 
   // *****************************************************

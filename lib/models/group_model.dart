@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Chatmodel {
+class GroupModel {
   final String groupId;
   final String groupName;
   final String adminName;
   final String recentMessage;
   final String recentMessageSender;
   final List members;
-  const Chatmodel({
+
+  const GroupModel({
     required this.groupId,
     required this.groupName,
     required this.adminName,
@@ -25,9 +26,9 @@ class Chatmodel {
         "Members": [],
       };
 
-  factory Chatmodel.datasnapshot(DocumentSnapshot snapshot) {
+  factory GroupModel.datasnapshot(DocumentSnapshot snapshot) {
     final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return Chatmodel(
+    return GroupModel(
       groupId: data["Group-Id"],
       groupName: data["Group-Name"],
       adminName: data["Admin-Name"],

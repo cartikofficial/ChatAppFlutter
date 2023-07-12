@@ -5,11 +5,11 @@ import 'package:groupie/widgets/message_tile.dart';
 import 'package:groupie/screens/group_info_screen.dart';
 import 'package:groupie/services/database_service.dart';
 
-class Chatscreen extends StatefulWidget {
+class ChatsScreen extends StatefulWidget {
   final String username;
   final String groupId;
   final String groupname;
-  const Chatscreen({
+  const ChatsScreen({
     super.key,
     required this.username,
     required this.groupId,
@@ -17,10 +17,10 @@ class Chatscreen extends StatefulWidget {
   });
 
   @override
-  State<Chatscreen> createState() => _ChatscreenState();
+  State<ChatsScreen> createState() => _ChatscreenState();
 }
 
-class _ChatscreenState extends State<Chatscreen> {
+class _ChatscreenState extends State<ChatsScreen> {
   Stream? chats;
   String admin = "";
   final TextEditingController messagecontroller = TextEditingController();
@@ -76,7 +76,7 @@ class _ChatscreenState extends State<Chatscreen> {
           IconButton(
             onPressed: () => nextpage(
               context,
-              Groupinfowidget(
+              GroupInformationScreen(
                 groupId: widget.groupId,
                 adminname: widget.username,
                 groupname: widget.groupname,

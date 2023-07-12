@@ -23,7 +23,7 @@ class Usermodel {
         "Groups": [],
       };
 
-  factory Usermodel.datasnapshot(DocumentSnapshot snapshot) {
+  factory Usermodel.getdatasnapshot(DocumentSnapshot snapshot) {
     final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Usermodel(
       uid: data["User-Id"],

@@ -6,11 +6,11 @@ import 'package:groupie/screens/home_screen.dart';
 import 'package:groupie/services/auth_services.dart';
 import 'package:groupie/services/database_service.dart';
 
-class Groupinfowidget extends StatefulWidget {
+class GroupInformationScreen extends StatefulWidget {
   final String adminname;
   final String groupId;
   final String groupname;
-  const Groupinfowidget({
+  const GroupInformationScreen({
     super.key,
     required this.adminname,
     required this.groupId,
@@ -18,19 +18,20 @@ class Groupinfowidget extends StatefulWidget {
   });
 
   @override
-  State<Groupinfowidget> createState() => _GroupinfowidgetState();
+  State<GroupInformationScreen> createState() => _GroupinfowidgetState();
 }
 
-class _GroupinfowidgetState extends State<Groupinfowidget> {
+class _GroupinfowidgetState extends State<GroupInformationScreen> {
   Stream? members;
-  Authservices authservices = Authservices();
+  final Authservices authservices = Authservices();
+
   @override
   void initState() {
     super.initState();
-    getgroupmembers();
+    getGroupMembers();
   }
 
-  void getgroupmembers() async {
+  void getGroupMembers() async {
     Databaseservice(
       uid: FirebaseAuth.instance.currentUser!.uid,
     ).getgroupmembers(widget.groupId).then((value) {
@@ -98,21 +99,23 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
           )
         ],
       ),
+
+      // Body
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: primarycolor.withOpacity(0.2),
+                color: primarycolor.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    radius: 30,
+                    radius: 28,
                     backgroundColor: primarycolor,
                     child: Text(
                       widget.groupname.substring(0, 1).toUpperCase(),
@@ -128,7 +131,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Groups: ${widget.groupname}",
+                        "Group: ${widget.groupname}",
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 5),
@@ -138,14 +141,14 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                 ],
               ),
             ),
-            memberlist(),
+            membersList(),
           ],
         ),
       ),
     );
   }
 
-  StreamBuilder memberlist() {
+  StreamBuilder membersList() {
     return StreamBuilder(
       stream: members,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -159,16 +162,16 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                   return Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 5,
-                      vertical: 20,
+                      vertical: 10,
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
-                        radius: 30,
+                        radius: 25,
                         backgroundColor: primarycolor,
                         child: Text(
                           widget.groupname.substring(0, 1).toUpperCase(),
                           style: const TextStyle(
-                            fontSize: 25,
+                            fontSize: 22,
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),

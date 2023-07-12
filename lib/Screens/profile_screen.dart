@@ -6,11 +6,13 @@ import 'package:groupie/shared/constants.dart';
 class Profilescreen extends StatefulWidget {
   final String username;
   final String useremail;
+  final String profilepick;
 
   const Profilescreen({
     super.key,
     required this.username,
     required this.useremail,
+    required this.profilepick,
   });
 
   @override
@@ -25,8 +27,8 @@ class _ProfilescreenState extends State<Profilescreen> {
     return Scaffold(
       // Drawer
       drawer: Userdrawer(
-        propic: "",
-        selectd: true,
+        title: "Profile",
+        propic: widget.profilepick,
         useremail: widget.useremail,
         username: widget.username,
       ),
@@ -45,9 +47,38 @@ class _ProfilescreenState extends State<Profilescreen> {
         padding: const EdgeInsets.all(25),
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 70,
-              backgroundImage: AssetImage("assets/images/jassmanak.png"),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: widget.profilepick != ""
+                      ? Image(
+                          height: 100,
+                          image: NetworkImage(widget.profilepick),
+                        )
+                      : const CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.grey,
+                          child: Icon(
+                            size: 75,
+                            Icons.person,
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.black,
+                      weight: 2,
+                    ),
+                  ),
+                )
+              ],
             ),
             const SizedBox(height: 30),
             Row(
@@ -57,7 +88,13 @@ class _ProfilescreenState extends State<Profilescreen> {
                   "Full Name: ",
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                 ),
-                Text(widget.username, style: const TextStyle(fontSize: 16)),
+                Expanded(
+                  child: Text(
+                    widget.username,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
             ),
             const Divider(height: 20, thickness: 1),
@@ -68,7 +105,13 @@ class _ProfilescreenState extends State<Profilescreen> {
                   "Email: ",
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                 ),
-                Text(widget.useremail, style: const TextStyle(fontSize: 16)),
+                Expanded(
+                  child: Text(
+                    widget.useremail,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
             ),
           ],

@@ -19,7 +19,7 @@ class Grouptile extends StatelessWidget {
     return GestureDetector(
       onTap: () => nextpage(
         context,
-        Chatscreen(
+        ChatsScreen(
           username: username,
           groupId: groupId,
           groupname: groupname,
@@ -31,17 +31,17 @@ class Grouptile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5),
         margin: const EdgeInsets.only(left: 8, right: 8, top: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
           color: primarycolor.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(25),
         ),
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: primarycolor,
             radius: 25,
-            child: Text(
+            child: const Text(
               textAlign: TextAlign.center,
-              groupname.substring(0, 1),
-              style: const TextStyle(
+              "G",
+              style: TextStyle(
                 fontSize: 25,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -52,9 +52,9 @@ class Grouptile extends StatelessWidget {
             groupname,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(
-            "Join the group as $username",
-            overflow: TextOverflow.ellipsis,
+          subtitle: const Text(
+            "Click, to see what they were Chatting",
+            style: TextStyle(fontSize: 13),
             maxLines: 2,
           ),
         ),

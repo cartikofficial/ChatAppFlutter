@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:groupie/providers/group_model_provider.dart';
+import 'package:groupie/providers/user_model_provider.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:groupie/screens/login_in_screen.dart';
 import 'package:groupie/services/shared_preferences.dart';
+import 'package:provider/provider.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -128,13 +131,23 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Groupie",
-      theme: ThemeData(
-        primaryColor: primarycolor,
-        scaffoldBackgroundColor: Colors.white,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserModelProvider>(
+          create: (context) => UserModelProvider(),
+        ),
+        ChangeNotifierProvider<GroupModelProvider>(
+          create: (context) => GroupModelProvider(),
+        )
+      ],
+      child: MaterialApp(
+        title: "Groupie",
+        theme: ThemeData(
+          primaryColor: primarycolor,
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        home: issignedin ? const HomeScreen() : const Loginscreen(),
       ),
-      home: issignedin ? const HomeScreen() : const Loginscreen(),
     );
   }
 }

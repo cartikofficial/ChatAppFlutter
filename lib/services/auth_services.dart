@@ -32,7 +32,7 @@ class Authservices {
 
       return true;
     } on FirebaseAuthException catch (e) {
-      if (kDebugMode) print(e.toString());
+      if (kDebugMode) print("${e.toString()} ☹️☹️");
       snackbarmessage(context, Colors.red, e);
     }
     return false;
@@ -51,7 +51,7 @@ class Authservices {
       );
       return true;
     } on FirebaseAuthException catch (e) {
-      if (kDebugMode) print(e.toString());
+      if (kDebugMode) print("${e.toString()} ☹️☹️");
       snackbarmessage(context, Colors.red, e);
     }
     return false;
@@ -65,7 +65,7 @@ class Authservices {
       if (googleuser != null) {
         showpopuploadingdialouge("Loading..", context);
 
-        GoogleSignInAuthentication? gauth = await googleuser.authentication;
+        GoogleSignInAuthentication gauth = await googleuser.authentication;
 
         final OAuthCredential credential = GoogleAuthProvider.credential(
           accessToken: gauth.accessToken,
@@ -75,25 +75,26 @@ class Authservices {
         UserCredential usercredential =
             await firebaseauath.signInWithCredential(credential);
 
-        await Databaseservice(uid: usercredential.user!.uid).savinguserdata(
-          usercredential.user!.email,
-          usercredential.user!.displayName,
-          usercredential.user!.photoURL,
-        );
+        if (usercredential.user != null) {
+          await Databaseservice(uid: usercredential.user!.uid).savinguserdata(
+            usercredential.user!.displayName!,
+            usercredential.user!.email!,
+            usercredential.user!.photoURL!,
+          );
+        }
 
-        await Sharedprefererncedata.saveuseremail(usercredential.user!.email);
+        await Sharedprefererncedata.saveuseremail(usercredential.user!.email!);
         await Sharedprefererncedata.saveusername(
-          usercredential.user!.displayName,
+          usercredential.user!.displayName!,
         );
         await Sharedprefererncedata.saveuserlogedinstatus(true);
-
-        Navigator.of(context).pop();
 
         return true;
       }
     } catch (e) {
-      if (kDebugMode) print(e.toString());
+      if (kDebugMode) print("${e.toString()} ☹️☹️");
       snackbarmessage(context, Colors.red, e);
+      Navigator.of(context).pop();
     }
     return false;
   }
@@ -110,6 +111,8 @@ class Authservices {
       await firebaseauath.signOut();
 
       Navigator.of(context).pop();
+
+      return true;
     } catch (e) {
       if (kDebugMode) print(e.toString());
       snackbarmessage(context, Colors.red, e);

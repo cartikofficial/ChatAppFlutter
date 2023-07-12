@@ -1,4 +1,6 @@
-import 'package:groupie/models/chat_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:groupie/models/group_model.dart';
 import 'package:groupie/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -18,53 +20,59 @@ class Databaseservice {
   // **************************************************
   // ********** Saving user data to Database **********
   Future savinguserdata(
-    String? name,
-    String? email,
-    String? profilepick,
+    String name,
+    String email,
+    String profilepick,
   ) async {
     Usermodel usermodel = Usermodel(
       uid: uid!,
-      name: name!,
-      email: email!,
-      profilepick: profilepick!,
+      name: name,
+      email: email,
+      profilepick: profilepick,
       groups: [],
     );
 
-    await usercollection.doc(uid).set({usermodel.tojson()});
+    await usercollection.doc(uid).set(usermodel.tojson());
   }
 
   // **************************************************
-  // ******* Getting the User data from Database ******
-  Future gettinguserdata(String email) async {
-    var snapshot = await usercollection.where("Email", isEqualTo: email).get();
-    return snapshot;
+  // **************** Getting User data ***************
+  Future<Usermodel> gettinguserdata() async {
+    final DocumentSnapshot snapshot =
+        await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+    if (kDebugMode) print(snapshot.data().toString());
+    if (kDebugMode) print("Sucessfully getted userdata🤩");
+
+    return Usermodel.getdatasnapshot(snapshot);
   }
 
   // **************************************************
   // ************** Getting User Groups ***************
-  Future getusergroups() async {
-    return usercollection.doc(uid).snapshots();
+  Future gettingusergroup() async {
+    return usercollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
   }
 
   // **************************************************
   // **************** Creating Groups *****************
-  Future creategroup(String username, String id, String groupname) async {
-    Chatmodel chatmodel = Chatmodel(
-      groupId: "${username}_$id",
+  Future creategroup(String username, String groupname) async {
+    GroupModel groupmodel = GroupModel(
+      adminName: "${username}_$uid",
+      groupId: "${username}_$uid",
       groupName: groupname,
-      adminName: "${username}_$id",
       recentMessage: "",
       recentMessageSender: "",
       members: [],
     );
 
-    DocumentReference groupdocumentReference = await groupcollection.add({
-      chatmodel.tojson(),
-    });
+    DocumentReference groupdocumentReference = await groupcollection.add(
+      groupmodel.tojson(),
+    );
 
     await groupdocumentReference.update({
-      "Members": FieldValue.arrayUnion(["${uid}_$username"]),
-      "Group-Id": groupdocumentReference.id,
+      "Members": FieldValue.arrayUnion(["${username}_$uid"]),
     });
 
     DocumentReference userdocumentreference = usercollection.doc(uid);
@@ -74,7 +82,15 @@ class Databaseservice {
       ]),
     });
   }
- 
+
+  // **************************************************
+  // ************** Getting all Groups ***************
+  // Future<GroupModel> getallgroups() async {
+  //   final DocumentSnapshot snapshot =
+  //       await groupcollection.doc(FirebaseAuth.instance.currentUser!.uid).get();
+  //   return GroupModel.datasnapshot(snapshot);
+  // }
+
   // **************************************************
   // ***************** Getting Chats ******************
   Future getchat(String groupId) async {
@@ -88,8 +104,8 @@ class Databaseservice {
   // **************************************************
   // ************** Getting Group Admin ***************
   Future getgroupAdmin(String groupId) async {
-    DocumentReference d = groupcollection.doc(groupId);
-    return d.collection("Admin").snapshots();
+    DocumentReference reference = groupcollection.doc(groupId);
+    return reference.collection("Admin").snapshots();
   }
 
   // Get Group members
@@ -98,8 +114,8 @@ class Databaseservice {
   }
 
   // Search Groups
-  Future searchgroupnames(String groupname) {
-    return groupcollection.where("Groupname", isEqualTo: groupname).get();
+  Future searchGroupName(String groupname) {
+    return groupcollection.where("Group-Name", isEqualTo: groupname).get();
   }
 
   // Is-user joined?
@@ -120,25 +136,30 @@ class Databaseservice {
     DocumentSnapshot documendSnapshot = await userdocumentreference.get();
     List<dynamic> groups = await documendSnapshot["Groups"];
 
-    // If user is already in group
+    // For Leaving the Group
     if (groups.contains("${groupid}_$groupname")) {
       await userdocumentreference.update({
         "Groups": FieldValue.arrayRemove(["${groupid}_$groupname"])
       });
+
       await groupdocumnetreference.update({
         "Members": FieldValue.arrayRemove(["${uid}_$username"])
       });
-    } else {
+    }
+    // For Joining the Group
+    else {
       await userdocumentreference.update({
         "Groups": FieldValue.arrayUnion(["${groupid}_$groupname"])
       });
+
       await groupdocumnetreference.update({
         "Members": FieldValue.arrayUnion(["${uid}_$username"])
       });
     }
   }
 
-  // Sendmessage
+  // **************************************************
+  // ****************** Sendmessage *******************
   void sendmessage(
     String groupid,
     Map<String, dynamic> chatmessagesdata,

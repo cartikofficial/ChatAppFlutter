@@ -49,6 +49,7 @@ class _SearchpageState extends State<Searchpage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
         child: Scaffold(
+          // AppBar
           appBar: AppBar(
             elevation: 0,
             backgroundColor: primarycolor,
@@ -61,6 +62,8 @@ class _SearchpageState extends State<Searchpage> {
               ),
             ),
           ),
+
+          // Body
           body: Column(
             children: [
               Container(
@@ -134,7 +137,7 @@ class _SearchpageState extends State<Searchpage> {
       setState(() => isloading = true);
 
       await Databaseservice()
-          .searchgroupnames(searchcontroller.text.toString().trim())
+          .searchGroupName(searchcontroller.text.toString().trim())
           .then((snapshot) {
         setState(() {
           isloading = false;
@@ -145,7 +148,7 @@ class _SearchpageState extends State<Searchpage> {
     }
   }
 
-  grouplist() {
+  Widget grouplist() {
     return searchsnapshot!.docs.isNotEmpty
         ? ListView.builder(
             shrinkWrap: true,
@@ -169,25 +172,6 @@ class _SearchpageState extends State<Searchpage> {
           );
   }
 
-  void joinedornot(
-    String username,
-    String groupid,
-    String groupname,
-    String adminname,
-  ) async {
-    await Databaseservice(uid: user!.uid)
-        .isuserjoined(
-      groupname,
-      groupid,
-      username,
-    )
-        .then((value) {
-      toogle.value = value;
-
-      setState(() => isjoined = toogle.value);
-    });
-  }
-
   Widget grouptile(
     String username,
     String groupid,
@@ -196,6 +180,7 @@ class _SearchpageState extends State<Searchpage> {
   ) {
     // Function to checking that the user has alredy logined or not
     joinedornot(username, groupid, groupname, adminname);
+    
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       leading: CircleAvatar(
@@ -249,7 +234,7 @@ class _SearchpageState extends State<Searchpage> {
                 Navigator.of(context).pop();
                 nextpage(
                   context,
-                  Chatscreen(
+                  ChatsScreen(
                     username: username,
                     groupId: groupid,
                     groupname: groupname,
@@ -290,5 +275,24 @@ class _SearchpageState extends State<Searchpage> {
               ),
       ),
     );
+  }
+
+  void joinedornot(
+    String username,
+    String groupid,
+    String groupname,
+    String adminname,
+  ) async {
+    await Databaseservice(uid: user!.uid)
+        .isuserjoined(
+      groupname,
+      groupid,
+      username,
+    )
+        .then((value) {
+      toogle.value = value;
+
+      setState(() => isjoined = toogle.value);
+    });
   }
 }

@@ -64,6 +64,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                         Image.asset("assets/images/register.png"),
                         const SizedBox(height: 15),
                         TextFormField(
+                          cursorColor: primarycolor,
                           textAlignVertical: TextAlignVertical.center,
                           decoration: textinputdecopration.copyWith(
                             labelText: "Name",
@@ -75,11 +76,12 @@ class _RegisterscreenState extends State<Registerscreen> {
                           validator: (value) {
                             return value!.isNotEmpty
                                 ? null
-                                : "name can't be empty";
+                                : "Name can't be empty";
                           },
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
+                          cursorColor: primarycolor,
                           keyboardType: TextInputType.emailAddress,
                           textAlignVertical: TextAlignVertical.center,
                           decoration: textinputdecopration.copyWith(
@@ -97,7 +99,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                             ).hasMatch(value!)
                                 ? null
-                                : "Please enter a valid value";
+                                : "Please enter a valid Email";
                           },
                         ),
                         const SizedBox(height: 20),
@@ -105,6 +107,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                           valueListenable: toogle,
                           builder: (context, value, child) {
                             return TextFormField(
+                              cursorColor: primarycolor,
                               textAlignVertical: TextAlignVertical.center,
                               obscureText: toogle.value,
                               obscuringCharacter: "*",
