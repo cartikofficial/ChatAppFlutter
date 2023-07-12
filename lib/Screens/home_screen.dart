@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:groupie/widgets/widget.dart';
 import '../services/shared_preferences.dart';
-import 'package:groupie/Screens/Drawer.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/group_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:groupie/Screens/search_screen.dart';
+import 'package:groupie/screens/search_screen.dart';
 import 'package:groupie/services/database_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void gettinguserdata() async {
+  Future gettinguserdata() async {
     await Databaseservice(uid: FirebaseAuth.instance.currentUser!.uid)
         .getusergroups()
         .then((snapshot) {
@@ -54,12 +53,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Userdrawer(),
+      // Drawer
+      // drawer: Userdrawer(
+      //   propic: "",
+      //   selectd: true,
+      //   useremail: "",
+      //   username: username,
+      // ),
+
+      // AppBar
       appBar: AppBar(
-        backgroundColor: Constants().primarycolor,
+        backgroundColor: primarycolor,
         title: const Text(
           "Groups",
-          style: TextStyle(fontSize: 30, color: Colors.white),
+          style: TextStyle(fontSize: 28, color: Colors.white),
         ),
         centerTitle: true,
         actions: [
@@ -73,56 +80,84 @@ class _HomeScreenState extends State<HomeScreen> {
       // Body
       body: isloading
           ? Center(
-              child: CircularProgressIndicator(color: Constants().primarycolor),
+              child: CircularProgressIndicator(color: primarycolor),
             )
-          : grouplist(),
+          : groupinfowidget(),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        onPressed: () => popUpDialoge(context),
-        backgroundColor: Constants().primarycolor,
+        onPressed: () => createyourgrouppopup(context),
+        backgroundColor: primarycolor,
         child: const Icon(Icons.add, size: 35),
       ),
     );
   }
 
-  StreamBuilder<dynamic> grouplist() {
+  StreamBuilder<dynamic> groupinfowidget() {
     return StreamBuilder(
       stream: groups,
-      initialData: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data["Groups"] != null) {
-            if (snapshot.data["Groups"].length != 0) {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data["Groups"].length,
-                itemBuilder: (context, index) {
-                  int reverseindex = snapshot.data['Groups'].length - index - 1;
-                  return Grouptile(
-                    username: username,
-                    groupId: getid(snapshot.data["Groups"][reverseindex]),
-                    groupname: getgrouopnamne(
-                      snapshot.data["Groups"][reverseindex],
-                    ),
-                  );
-                },
-              );
-            } else {
-              return nongroupwidget();
-            }
+          // if (snapshot.data["Groups"] != null) {
+          if (snapshot.data["Groups"].length != 0) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: constbouncebehaviour,
+              itemCount: snapshot.data["Groups"].length,
+              itemBuilder: (context, index) {
+                int reverseindex = snapshot.data['Groups'].length - index - 1;
+                return Grouptile(
+                  username: username,
+                  groupId: getid(snapshot.data["Groups"][reverseindex]),
+                  groupname: getgrouopnamne(
+                    snapshot.data["Groups"][reverseindex],
+                  ),
+                );
+              },
+            );
           } else {
             return nongroupwidget();
           }
+          // }
+          // else {
+          //   return nongroupwidget();
+          // }
         } else {
           return Center(
-            child: CircularProgressIndicator(color: Constants().primarycolor),
+            child: CircularProgressIndicator(color: primarycolor),
           );
         }
       },
     );
   }
 
-  void popUpDialoge(BuildContext context) {
+  Center nongroupwidget() {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => createyourgrouppopup(context),
+              child: Icon(
+                size: 80,
+                Icons.add_circle,
+                color: Colors.grey[700],
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "you've not Joined any groups, tap on the add icon to creat a groups or you can also search from top search bar",
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void createyourgrouppopup(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -141,13 +176,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(
-                      color: Constants().primarycolor,
+                      color: primarycolor,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(
-                      color: Constants().primarycolor,
+                      color: primarycolor,
                     ),
                   ),
                   errorBorder: OutlineInputBorder(
@@ -161,14 +196,14 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Constants().primarycolor,
+                backgroundColor: primarycolor,
               ),
               onPressed: () => Navigator.pop(context),
               child: const Text("Cancle"),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Constants().primarycolor,
+                backgroundColor: primarycolor,
               ),
               onPressed: () {
                 if (groupname != "") {
@@ -199,33 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       },
-    );
-  }
-
-  Center nongroupwidget() {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () => popUpDialoge(context),
-              child: Icon(
-                size: 80,
-                Icons.add_circle,
-                color: Colors.grey[700],
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "you've not Joined any groups, tap on the add icon to creat a groups or you can also search from top search bar",
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

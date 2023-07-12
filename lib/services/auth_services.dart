@@ -7,10 +7,10 @@ import 'package:groupie/services/database_service.dart';
 import 'package:groupie/services/shared_preferences.dart';
 
 class Authservices {
-  FirebaseAuth firebaseauath = FirebaseAuth.instance;
+  final FirebaseAuth firebaseauath = FirebaseAuth.instance;
 
   // Register
-  Future<bool> registeruserwithemailandpassword(
+  Future<bool> createuserwithemailandpassword(
     String name,
     String email,
     String password,
@@ -24,11 +24,15 @@ class Authservices {
         password: password,
       );
 
-      await Databaseservice(uid: userCredential.user?.uid)
-          .savinguserdata(name, email);
+      await Databaseservice(uid: userCredential.user!.uid).savinguserdata(
+        name,
+        email,
+        "",
+      );
 
       return true;
     } on FirebaseAuthException catch (e) {
+      if (kDebugMode) print(e.toString());
       snackbarmessage(context, Colors.red, e);
     }
     return false;
@@ -47,6 +51,7 @@ class Authservices {
       );
       return true;
     } on FirebaseAuthException catch (e) {
+      if (kDebugMode) print(e.toString());
       snackbarmessage(context, Colors.red, e);
     }
     return false;
@@ -56,6 +61,7 @@ class Authservices {
   Future<bool> signinwithgoogle(context) async {
     try {
       final GoogleSignInAccount? googleuser = await GoogleSignIn().signIn();
+
       if (googleuser != null) {
         showpopuploadingdialouge("Loading..", context);
 
@@ -72,6 +78,7 @@ class Authservices {
         await Databaseservice(uid: usercredential.user!.uid).savinguserdata(
           usercredential.user!.email,
           usercredential.user!.displayName,
+          usercredential.user!.photoURL,
         );
 
         await Sharedprefererncedata.saveuseremail(usercredential.user!.email);
@@ -79,6 +86,8 @@ class Authservices {
           usercredential.user!.displayName,
         );
         await Sharedprefererncedata.saveuserlogedinstatus(true);
+
+        Navigator.of(context).pop();
 
         return true;
       }
@@ -92,12 +101,17 @@ class Authservices {
   // Sign-out
   Future signout(context) async {
     try {
+      showpopuploadingdialouge("Loading..", context);
+
       await Sharedprefererncedata.saveuserlogedinstatus(false);
       await Sharedprefererncedata.saveuseremail("");
       await Sharedprefererncedata.saveusername("");
       await GoogleSignIn().signOut();
       await firebaseauath.signOut();
+
+      Navigator.of(context).pop();
     } catch (e) {
+      if (kDebugMode) print(e.toString());
       snackbarmessage(context, Colors.red, e);
     }
   }

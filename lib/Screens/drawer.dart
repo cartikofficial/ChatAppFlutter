@@ -2,38 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/services/auth_services.dart';
-import 'package:groupie/Screens/profile_screen.dart';
-import 'package:groupie/Screens/login_in_screen.dart';
-import 'package:groupie/services/shared_preferences.dart';
+import 'package:groupie/screens/profile_screen.dart';
+import 'package:groupie/screens/login_in_screen.dart';
 
 class Userdrawer extends StatefulWidget {
-  const Userdrawer({super.key});
+  final bool selectd;
+  final String propic;
+  final String username;
+  final String useremail;
+  const Userdrawer({
+    super.key,
+    required this.propic,
+    required this.selectd,
+    required this.username,
+    required this.useremail,
+  });
 
   @override
   State<Userdrawer> createState() => _UserdrawerState();
 }
 
 class _UserdrawerState extends State<Userdrawer> {
-  bool selectd = false;
-  String username = "";
-  String useremail = "";
   final Authservices authservices = Authservices();
-
-  @override
-  void initState() {
-    super.initState();
-    getuserdata();
-  }
-
-  void getuserdata() async {
-    await Sharedprefererncedata.getusername().then((value) {
-      setState(() => username = value!);
-    });
-
-    await Sharedprefererncedata.getuseremail().then((value) {
-      setState(() => useremail = value!);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +34,10 @@ class _UserdrawerState extends State<Userdrawer> {
           UserAccountsDrawerHeader(
             currentAccountPictureSize: const Size.fromRadius(40),
             currentAccountPicture: const CircleAvatar(
-              backgroundImage: AssetImage("assets/images/jassmanak.png"),
-            ),
-            accountName: Text(username),
-            accountEmail: Text(useremail),
+                // backgroundImage: NetworkImage(widget.propic),
+                ),
+            accountName: Text(widget.username),
+            accountEmail: Text(widget.useremail),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/backimage.png"),
@@ -56,19 +46,22 @@ class _UserdrawerState extends State<Userdrawer> {
           ),
           ListTile(
             onTap: () {},
-            selected: true,
+            selected: widget.selectd,
             leading: const Icon(Icons.group),
-            selectedColor: Constants().primarycolor,
+            selectedColor: primarycolor,
             title: const Text("Group", style: TextStyle(color: Colors.black)),
           ),
           const Divider(height: 2),
           ListTile(
             onTap: () => nextpage(
               context,
-              Profilescreen(username: username, useremail: useremail),
+              Profilescreen(
+                username: widget.username,
+                useremail: widget.useremail,
+              ),
             ),
-            selected: selectd,
-            selectedColor: Constants().primarycolor,
+            selected: !widget.selectd,
+            selectedColor: primarycolor,
             leading: const Icon(Icons.account_box_sharp),
             title: const Text("Profile", style: TextStyle(color: Colors.black)),
           ),
@@ -85,19 +78,18 @@ class _UserdrawerState extends State<Userdrawer> {
                     content: const Text("Are you sure, you want to logout!"),
                     actions: [
                       IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                         icon: Icon(
                           Icons.cancel,
-                          color: Constants().primarycolor,
+                          color: primarycolor,
                         ),
                       ),
                       IconButton(
-                        onPressed: () async => await authservices
-                            .signout(context)
-                            .whenComplete(() {
-                          nextpagereplacement(context, const Loginscreen());
+                        onPressed: () async =>
+                            await authservices.signout(context).then((value) {
+                          if (value == true) {
+                            nextpagereplacement(context, const Loginscreen());
+                          }
                         }),
                         icon: const Icon(Icons.done, color: Colors.green),
                       ),
@@ -107,7 +99,7 @@ class _UserdrawerState extends State<Userdrawer> {
               );
             },
             leading: const Icon(Icons.logout),
-            selectedColor: Constants().primarycolor,
+            selectedColor: primarycolor,
             title: const Text("Logout", style: TextStyle(color: Colors.black)),
           ),
         ],

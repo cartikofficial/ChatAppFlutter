@@ -66,7 +66,7 @@ packages:
     source: hosted
     version: "5.15.2"
   cloud_firestore_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cloud_firestore_web
       sha256: bbf0ebb9d1e9251caa00e8727389313c64cb4240c1c31f895971c52d0c782316
@@ -288,22 +288,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.0+2"
-  google_sign_in_web_redirect:
-    dependency: "direct main"
-    description:
-      name: google_sign_in_web_redirect
-      sha256: db22f094b4b962bb7d7e550ea0027a0836b5027d04e12a5417be0a4d93159794
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   http:
     dependency: transitive
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:

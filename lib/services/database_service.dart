@@ -1,49 +1,65 @@
+import 'package:groupie/models/chat_model.dart';
+import 'package:groupie/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Databaseservice {
   final String? uid;
   Databaseservice({this.uid});
 
-  // References of our collections
-  CollectionReference usercollection =
-      FirebaseFirestore.instance.collection("Users");
-  CollectionReference groupcollection =
-      FirebaseFirestore.instance.collection("User_groups");
+  // **************************************************
+  // ********* References of our collections **********
+  CollectionReference usercollection = FirebaseFirestore.instance.collection(
+    "Users",
+  );
+  CollectionReference groupcollection = FirebaseFirestore.instance.collection(
+    "User_groups",
+  );
 
-  // Saving user data to Firestore Database
-  Future savinguserdata(String? name, String? email) async {
-    return await usercollection.doc(uid).set({
-      "Name": name,
-      "Email": email,
-      "Groups": [],
-      "Profilepic": "",
-      "User-Id": uid,
-    });
+  // **************************************************
+  // ********** Saving user data to Database **********
+  Future savinguserdata(
+    String? name,
+    String? email,
+    String? profilepick,
+  ) async {
+    Usermodel usermodel = Usermodel(
+      uid: uid!,
+      name: name!,
+      email: email!,
+      profilepick: profilepick!,
+      groups: [],
+    );
+
+    await usercollection.doc(uid).set({usermodel.tojson()});
   }
 
-  // Getting the User data from Firestore Database
+  // **************************************************
+  // ******* Getting the User data from Database ******
   Future gettinguserdata(String email) async {
-    QuerySnapshot snapshot =
-        await usercollection.where("Email", isEqualTo: email).get();
+    var snapshot = await usercollection.where("Email", isEqualTo: email).get();
     return snapshot;
-    // We can aslo write it as:-
-    // return await usercollection.where("Email", isEqualTo: email).get();
   }
 
-  // Getting User Groups data
+  // **************************************************
+  // ************** Getting User Groups ***************
   Future getusergroups() async {
     return usercollection.doc(uid).snapshots();
   }
 
-  // Creating Groups for User
+  // **************************************************
+  // **************** Creating Groups *****************
   Future creategroup(String username, String id, String groupname) async {
+    Chatmodel chatmodel = Chatmodel(
+      groupId: "${username}_$id",
+      groupName: groupname,
+      adminName: "${username}_$id",
+      recentMessage: "",
+      recentMessageSender: "",
+      members: [],
+    );
+
     DocumentReference groupdocumentReference = await groupcollection.add({
-      "Groupname": groupname,
-      "Admin": "${id}_$username",
-      "Group-Id": "",
-      "Members": [],
-      "Recent message": "",
-      "Recent message sender": "",
+      chatmodel.tojson(),
     });
 
     await groupdocumentReference.update({
@@ -54,12 +70,13 @@ class Databaseservice {
     DocumentReference userdocumentreference = usercollection.doc(uid);
     return await userdocumentreference.update({
       "Groups": FieldValue.arrayUnion([
-        ("${groupdocumentReference.id}_$groupname"),
+        "${groupdocumentReference.id}_$groupname",
       ]),
     });
   }
-
-  // Getting Chats from database
+ 
+  // **************************************************
+  // ***************** Getting Chats ******************
   Future getchat(String groupId) async {
     return groupcollection
         .doc(groupId)
@@ -68,19 +85,20 @@ class Databaseservice {
         .snapshots();
   }
 
-  // Getting Group Admin
+  // **************************************************
+  // ************** Getting Group Admin ***************
   Future getgroupAdmin(String groupId) async {
     DocumentReference d = groupcollection.doc(groupId);
     return d.collection("Admin").snapshots();
   }
 
   // Get Group members
-  getgroupmembers(groupId) async {
+  Future getgroupmembers(groupId) async {
     return groupcollection.doc(groupId).snapshots();
   }
 
   // Search Groups
-  searchgroupnames(String groupname) {
+  Future searchgroupnames(String groupname) {
     return groupcollection.where("Groupname", isEqualTo: groupname).get();
   }
 

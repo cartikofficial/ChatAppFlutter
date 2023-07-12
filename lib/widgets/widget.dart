@@ -29,8 +29,8 @@ void nextpagereplacement(context, page) {
 void snackbarmessage(context, color, e) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(seconds: 8),
-      content: Text(e.message.toString()),
+      duration: const Duration(seconds: 6),
+      content: Text(e.toString()),
       backgroundColor: color,
     ),
   );
@@ -48,7 +48,7 @@ void showpopuploadingdialouge(String msg, context) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
-                color: Constants().primarycolor,
+                color: primarycolor,
               ),
               const SizedBox(width: 20),
               Text(msg, style: const TextStyle(fontSize: 16)),

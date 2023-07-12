@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
+import 'package:groupie/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:groupie/Screens/home_screen.dart';
+import 'package:groupie/screens/home_screen.dart';
 import 'package:groupie/services/auth_services.dart';
 import 'package:groupie/services/database_service.dart';
 
@@ -52,7 +52,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
       appBar: AppBar(
         title: const Text("Group Info"),
         centerTitle: true,
-        backgroundColor: Constants().primarycolor,
+        backgroundColor: primarycolor,
         actions: [
           IconButton(
             onPressed: () {
@@ -70,7 +70,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                         onPressed: () => Navigator.pop(context),
                         icon: Icon(
                           Icons.cancel,
-                          color: Constants().primarycolor,
+                          color: primarycolor,
                         ),
                       ),
                       IconButton(
@@ -106,14 +106,14 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Constants().primarycolor.withOpacity(0.2),
+                color: primarycolor.withOpacity(0.2),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundColor: Constants().primarycolor,
+                    backgroundColor: primarycolor,
                     child: Text(
                       widget.groupname.substring(0, 1).toUpperCase(),
                       style: const TextStyle(
@@ -164,7 +164,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 30,
-                        backgroundColor: Constants().primarycolor,
+                        backgroundColor: primarycolor,
                         child: Text(
                           widget.groupname.substring(0, 1).toUpperCase(),
                           style: const TextStyle(
@@ -188,7 +188,7 @@ class _GroupinfowidgetState extends State<Groupinfowidget> {
           }
         } else {
           return Center(
-            child: CircularProgressIndicator(color: Constants().primarycolor),
+            child: CircularProgressIndicator(color: primarycolor),
           );
         }
       },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/message_tile.dart';
-import 'package:groupie/Screens/group_info_screen.dart';
+import 'package:groupie/screens/group_info_screen.dart';
 import 'package:groupie/services/database_service.dart';
 
 class Chatscreen extends StatefulWidget {
@@ -71,7 +71,7 @@ class _ChatscreenState extends State<Chatscreen> {
         title: Text(widget.groupname),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Constants().primarycolor,
+        backgroundColor: primarycolor,
         actions: [
           IconButton(
             onPressed: () => nextpage(
@@ -88,11 +88,10 @@ class _ChatscreenState extends State<Chatscreen> {
       ),
       body: Column(
         children: [
-          // *************************************************
-          // **************** Chats/Messages *****************
-          Expanded(
-            child: chatsandmessage(),
-          ),
+          // Chats
+          Expanded(child: chatsandmessage()),
+
+          //
           Container(
             width: double.infinity,
             alignment: Alignment.bottomCenter,
@@ -104,6 +103,7 @@ class _ChatscreenState extends State<Chatscreen> {
                   Expanded(
                     child: TextFormField(
                       controller: messagecontroller,
+                      cursorColor: primarycolor,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -119,7 +119,7 @@ class _ChatscreenState extends State<Chatscreen> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Constants().primarycolor,
+                        color: primarycolor,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Center(
@@ -141,9 +141,11 @@ class _ChatscreenState extends State<Chatscreen> {
       stream: chats,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          color: Constants().primarycolor.withOpacity(0.1),
+          color: primarycolor.withOpacity(0.1),
           child: snapshot.hasData
               ? ListView.builder(
+                  physics: constbouncebehaviour,
+                  shrinkWrap: true,
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (BuildContext context, int index) => Messagetile(
                     message: snapshot.data.docs[index]["Message"],
@@ -152,7 +154,7 @@ class _ChatscreenState extends State<Chatscreen> {
                         snapshot.data.docs[index]['Sender'],
                   ),
                 )
-              : Container(),
+              : null,
         );
       },
     );
@@ -168,9 +170,7 @@ class _ChatscreenState extends State<Chatscreen> {
 
       Databaseservice().sendmessage(widget.groupId, chatmessagemap);
 
-      setState(() {
-        messagecontroller.clear();
-      });
+      setState(() => messagecontroller.clear());
     }
   }
 }

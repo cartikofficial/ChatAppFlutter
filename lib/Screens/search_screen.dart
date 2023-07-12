@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:groupie/Screens/chat_screen.dart';
+import 'package:groupie/screens/chat_screen.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,7 +51,7 @@ class _SearchpageState extends State<Searchpage> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Constants().primarycolor,
+            backgroundColor: primarycolor,
             title: const Text(
               "Search",
               style: TextStyle(
@@ -66,7 +66,7 @@ class _SearchpageState extends State<Searchpage> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Constants().primarycolor,
+                  color: primarycolor,
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25),
@@ -77,6 +77,7 @@ class _SearchpageState extends State<Searchpage> {
                     Expanded(
                       child: TextField(
                         controller: searchcontroller,
+                        cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
                           hintText: "Search Groups....",
@@ -92,10 +93,10 @@ class _SearchpageState extends State<Searchpage> {
                     GestureDetector(
                       onTap: () => iniatiatesearchmethod(),
                       child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 42,
+                        height: 42,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Icon(Icons.search, color: Colors.white),
@@ -108,12 +109,19 @@ class _SearchpageState extends State<Searchpage> {
               isloading
                   ? Center(
                       child: CircularProgressIndicator(
-                        color: Constants().primarycolor,
+                        color: primarycolor,
                       ),
                     )
                   : hasusersearched
                       ? grouplist()
-                      : const SizedBox(),
+                      : Text(
+                          textAlign: TextAlign.center,
+                          "Search your Group",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey.withOpacity(0.8),
+                          ),
+                        ),
             ],
           ),
         ),
@@ -141,6 +149,7 @@ class _SearchpageState extends State<Searchpage> {
     return searchsnapshot!.docs.isNotEmpty
         ? ListView.builder(
             shrinkWrap: true,
+            physics: constbouncebehaviour,
             itemCount: searchsnapshot!.docs.length,
             itemBuilder: (BuildContext context, int index) {
               return grouptile(
@@ -191,7 +200,7 @@ class _SearchpageState extends State<Searchpage> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       leading: CircleAvatar(
         radius: 25,
-        backgroundColor: Constants().primarycolor,
+        backgroundColor: primarycolor,
         child: Text(
           groupname.substring(0, 1).toUpperCase(),
           style: const TextStyle(color: Colors.white),
@@ -235,9 +244,10 @@ class _SearchpageState extends State<Searchpage> {
               );
             });
             Future.delayed(
-              const Duration(seconds: 2),
+              const Duration(seconds: 1),
               () {
-                nextpagereplacement(
+                Navigator.of(context).pop();
+                nextpage(
                   context,
                   Chatscreen(
                     username: username,
@@ -266,7 +276,7 @@ class _SearchpageState extends State<Searchpage> {
               )
             : Container(
                 decoration: BoxDecoration(
-                  color: Constants().primarycolor,
+                  color: primarycolor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.symmetric(

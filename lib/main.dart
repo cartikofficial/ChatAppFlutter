@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:groupie/shared/constants.dart';
-import 'package:groupie/Screens/home_screen.dart';
+import 'package:groupie/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:groupie/Screens/login_in_screen.dart';
+import 'package:groupie/screens/login_in_screen.dart';
 import 'package:groupie/services/shared_preferences.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -131,7 +131,7 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       title: "Groupie",
       theme: ThemeData(
-        primaryColor: Constants().primarycolor,
+        primaryColor: primarycolor,
         scaffoldBackgroundColor: Colors.white,
       ),
       home: issignedin ? const HomeScreen() : const Loginscreen(),

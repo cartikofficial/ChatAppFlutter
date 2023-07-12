@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groupie/shared/constants.dart';
 
-class Messagetile extends StatefulWidget {
+class Messagetile extends StatelessWidget {
   final String message;
   final String sender;
   final bool sendedbyme;
@@ -13,34 +13,26 @@ class Messagetile extends StatefulWidget {
   });
 
   @override
-  State<Messagetile> createState() => _MessagetileState();
-}
-
-class _MessagetileState extends State<Messagetile> {
-  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      // constraints: BoxConstraints(
+      //   maxWidth: MediaQuery.of(context).size.width * 0.68,
+      // ),
       padding: EdgeInsets.only(
         top: 5,
         bottom: 5,
-        left: widget.sendedbyme ? 0 : 15,
-        right: widget.sendedbyme ? 15 : 0,
+        left: sendedbyme ? 0 : 15,
+        right: sendedbyme ? 15 : 0,
       ),
-      alignment:
-          widget.sendedbyme ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: sendedbyme ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: widget.sendedbyme
-            ? const EdgeInsets.only(left: 60)
-            : const EdgeInsets.only(right: 60),
-        padding: const EdgeInsets.only(
-          top: 12,
-          left: 10,
-          right: 10,
-          bottom: 12,
-        ),
+        margin: sendedbyme
+            ? EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.25)
+            : EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.25),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: widget.sendedbyme
+          borderRadius: sendedbyme
               ? const BorderRadius.only(
                   topRight: Radius.circular(22),
                   topLeft: Radius.circular(22),
@@ -51,25 +43,25 @@ class _MessagetileState extends State<Messagetile> {
                   topLeft: Radius.circular(22),
                   bottomRight: Radius.circular(22),
                 ),
-          color: Constants().primarycolor,
+          color: primarycolor,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.sender.toUpperCase(),
+              sender.toUpperCase(),
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                fontSize: 11,
                 wordSpacing: -0.8,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
-              widget.message,
-              textAlign: TextAlign.center,
+              message,
+              textAlign: TextAlign.left,
               style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
           ],

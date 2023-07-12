@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
-import 'package:groupie/Screens/home_screen.dart';
+import 'package:groupie/screens/home_screen.dart';
 import 'package:groupie/services/auth_services.dart';
-import 'package:groupie/Screens/login_in_screen.dart';
+import 'package:groupie/screens/login_in_screen.dart';
 import 'package:groupie/services/shared_preferences.dart';
 
 class Registerscreen extends StatefulWidget {
@@ -30,16 +30,15 @@ class _RegisterscreenState extends State<Registerscreen> {
       child: SafeArea(
         child: Scaffold(
           body: Center(
-            // width: double.infinity,
-            // alignment: Alignment.center,
             child: SingleChildScrollView(
+              physics: constbouncebehaviour,
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 500),
                 alignment: Alignment.center,
                 child: Form(
                   key: formkey,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,10 +67,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                           textAlignVertical: TextAlignVertical.center,
                           decoration: textinputdecopration.copyWith(
                             labelText: "Name",
-                            prefixIcon: Icon(
-                              Icons.person,
-                              color: Constants().primarycolor,
-                            ),
+                            prefixIcon: Icon(Icons.person, color: primarycolor),
                           ),
                           onChanged: (value) {
                             setState(() => name = value);
@@ -90,7 +86,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                             labelText: "Email",
                             prefixIcon: Icon(
                               Icons.email,
-                              color: Constants().primarycolor,
+                              color: primarycolor,
                             ),
                           ),
                           onChanged: (value) {
@@ -116,7 +112,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                                 labelText: "Password",
                                 prefixIcon: Icon(
                                   Icons.lock,
-                                  color: Constants().primarycolor,
+                                  color: primarycolor,
                                 ),
                                 suffix: InkWell(
                                   onTap: () => toogle.value = !toogle.value,
@@ -124,7 +120,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                                     toogle.value
                                         ? Icons.visibility_rounded
                                         : Icons.visibility_off_rounded,
-                                    color: Constants().primarycolor,
+                                    color: primarycolor,
                                   ),
                                 ),
                               ),
@@ -148,7 +144,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              backgroundColor: Constants().primarycolor,
+                              backgroundColor: primarycolor,
                             ),
                             onPressed: () => register(context),
                             child: const Text("Sign-in"),
@@ -193,7 +189,7 @@ class _RegisterscreenState extends State<Registerscreen> {
       showpopuploadingdialouge("Loading..", context);
 
       authservice
-          .registeruserwithemailandpassword(
+          .createuserwithemailandpassword(
         name.trim(),
         email.trim(),
         password.trim(),
@@ -201,7 +197,6 @@ class _RegisterscreenState extends State<Registerscreen> {
       )
           .then((value) async {
         if (value == true) {
-          // saving data to shared prefrence
           await Sharedprefererncedata.saveuserlogedinstatus(true);
           await Sharedprefererncedata.saveuseremail(email);
           await Sharedprefererncedata.saveusername(name);
