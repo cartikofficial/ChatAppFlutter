@@ -204,6 +204,8 @@ class _RegisterscreenState extends State<Registerscreen> {
           await Sharedprefererncedata.saveuseremail(email);
           await Sharedprefererncedata.saveusername(name);
 
+          Navigator.of(context).pop();
+
           nextpagereplacement(context, const HomeScreen());
         }
       });

@@ -194,11 +194,11 @@ class _LoginscreenState extends State<Loginscreen> {
       )
           .then((value) async {
         if (value == true) {
-          // await Databaseservice().gettinguserdata();
-
           await Sharedprefererncedata.saveuseremail(email.trim());
-          // await Sharedprefererncedata.saveusername(snapshot.docs[0]["Name"]);
+          // await Sharedprefererncedata.saveusername(snap.docs[0]["Name"]);
           await Sharedprefererncedata.saveuserlogedinstatus(true);
+
+          Navigator.of(context).pop();
 
           nextpagereplacement(context, const HomeScreen());
         }

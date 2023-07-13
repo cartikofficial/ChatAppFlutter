@@ -22,7 +22,7 @@ class GroupInformationScreen extends StatefulWidget {
 }
 
 class _GroupinfowidgetState extends State<GroupInformationScreen> {
-  Stream? members;
+  Stream? groupmembers;
   final Authservices authservices = Authservices();
 
   @override
@@ -34,8 +34,8 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
   void getGroupMembers() async {
     Databaseservice(
       uid: FirebaseAuth.instance.currentUser!.uid,
-    ).getgroupmembers(widget.groupId).then((value) {
-      setState(() => members = value);
+    ).getGroupMembers(widget.groupId).then((value) {
+      setState(() => groupmembers = value);
     });
   }
 
@@ -150,7 +150,7 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
 
   StreamBuilder membersList() {
     return StreamBuilder(
-      stream: members,
+      stream: groupmembers,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data["Members"] != null) {
@@ -160,13 +160,10 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
                 itemCount: snapshot.data["Members"].length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 10,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
                       leading: CircleAvatar(
-                        radius: 25,
+                        radius: 22,
                         backgroundColor: primarycolor,
                         child: Text(
                           widget.groupname.substring(0, 1).toUpperCase(),

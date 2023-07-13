@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // String username = "";
   String groupname = "";
   bool isloading = false;
   Stream? usercreatedgroups;
@@ -55,10 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   String getGroupId(String res) {
+    print("get group id");
+    print(res.substring(0, res.indexOf("_")));
+
     return res.substring(0, res.indexOf("_"));
   }
 
   String getGroupNamne(String res) {
+    print("get group name");
+    print(res.substring(res.indexOf("_") + 1));
+
     return res.substring(res.indexOf("_") + 1);
   }
 
@@ -123,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 int rindex = snapshot.data["Groups"].length - index - 1;
                 return Grouptile(
-                  username: currentusername,
-                  groupId: getGroupId(snapshot.data["Groups"][rindex]),
+                  currentusername: currentusername,
+                  groupid: getGroupId(snapshot.data["Groups"][rindex]),
                   groupname: getGroupNamne(snapshot.data["Groups"][rindex]),
                 );
               },

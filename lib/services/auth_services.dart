@@ -34,6 +34,7 @@ class Authservices {
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) print("${e.toString()} ☹️☹️");
       snackbarmessage(context, Colors.red, e);
+      Navigator.of(context).pop();
     }
     return false;
   }
@@ -53,6 +54,7 @@ class Authservices {
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) print("${e.toString()} ☹️☹️");
       snackbarmessage(context, Colors.red, e);
+      Navigator.of(context).pop();
     }
     return false;
   }
@@ -114,8 +116,9 @@ class Authservices {
 
       return true;
     } catch (e) {
-      if (kDebugMode) print(e.toString());
+      if (kDebugMode) print("${e.toString()} ☹️☹️");
       snackbarmessage(context, Colors.red, e);
+      Navigator.of(context).pop();
     }
   }
 }

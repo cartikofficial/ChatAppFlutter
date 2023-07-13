@@ -4,7 +4,6 @@ import 'package:groupie/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:groupie/services/database_service.dart';
-import 'package:groupie/services/shared_preferences.dart';
 import 'package:groupie/widgets/widget.dart';
 
 class Searchpage extends StatefulWidget {
@@ -31,11 +30,11 @@ class _SearchpageState extends State<Searchpage> {
   }
 
   void getusernameandId() async {
-    await Sharedprefererncedata.getusername().then((value) {
-      setState(() {
-        username = value!;
-      });
-    });
+    // await Sharedprefererncedata.getusername().then((value) {
+    //   setState(() {
+    //     username = value!;
+    //   });
+    // });
     user = FirebaseAuth.instance.currentUser;
   }
 
@@ -111,9 +110,7 @@ class _SearchpageState extends State<Searchpage> {
               const SizedBox(height: 20),
               isloading
                   ? Center(
-                      child: CircularProgressIndicator(
-                        color: primarycolor,
-                      ),
+                      child: CircularProgressIndicator(color: primarycolor),
                     )
                   : hasusersearched
                       ? grouplist()
@@ -158,8 +155,8 @@ class _SearchpageState extends State<Searchpage> {
               return grouptile(
                 username,
                 searchsnapshot!.docs[index]["Group-Id"],
-                searchsnapshot!.docs[index]["Groupname"],
-                searchsnapshot!.docs[index]["Admin"],
+                searchsnapshot!.docs[index]["Group-Name"],
+                searchsnapshot!.docs[index]["Admin-Name"],
               );
             })
         : Text(
@@ -180,7 +177,7 @@ class _SearchpageState extends State<Searchpage> {
   ) {
     // Function to checking that the user has alredy logined or not
     joinedornot(username, groupid, groupname, adminname);
-    
+
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       leading: CircleAvatar(
@@ -197,6 +194,8 @@ class _SearchpageState extends State<Searchpage> {
       ),
       subtitle: Text(
         "Admin: ${getname(adminname)}",
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontSize: 13),
       ),
       trailing: InkWell(
@@ -235,7 +234,7 @@ class _SearchpageState extends State<Searchpage> {
                 nextpage(
                   context,
                   ChatsScreen(
-                    username: username,
+                    currentusername: username,
                     groupId: groupid,
                     groupname: groupname,
                   ),
@@ -251,8 +250,8 @@ class _SearchpageState extends State<Searchpage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 22,
-                  vertical: 12,
+                  vertical: 8,
+                  horizontal: 12,
                 ),
                 child: const Text(
                   "Joined",
@@ -265,8 +264,8 @@ class _SearchpageState extends State<Searchpage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                  vertical: 12,
+                  vertical: 8,
+                  horizontal: 12,
                 ),
                 child: const Text(
                   "Join now",
@@ -284,11 +283,7 @@ class _SearchpageState extends State<Searchpage> {
     String adminname,
   ) async {
     await Databaseservice(uid: user!.uid)
-        .isuserjoined(
-      groupname,
-      groupid,
-      username,
-    )
+        .isUserJoined(groupname, groupid, username)
         .then((value) {
       toogle.value = value;
 

@@ -4,25 +4,30 @@ import 'package:groupie/shared/constants.dart';
 import 'package:groupie/screens/chat_screen.dart';
 
 class Grouptile extends StatelessWidget {
-  final String username;
-  final String groupId;
+  final String currentusername;
+  final String groupid;
   final String groupname;
   const Grouptile({
     super.key,
-    required this.username,
-    required this.groupId,
+    required this.currentusername,
+    required this.groupid,
     required this.groupname,
   });
 
   @override
   Widget build(BuildContext context) {
+    String gid = groupid.substring(0);
+    String gname = groupname.substring(groupname.indexOf("_") + 1);
+    print(gid);
+    print(currentusername);
+
     return GestureDetector(
       onTap: () => nextpage(
         context,
         ChatsScreen(
-          username: username,
-          groupId: groupId,
-          groupname: groupname,
+          currentusername: currentusername,
+          groupId: groupid,
+          groupname: gname,
         ),
       ),
       child: Container(
@@ -38,10 +43,10 @@ class Grouptile extends StatelessWidget {
           leading: CircleAvatar(
             backgroundColor: primarycolor,
             radius: 25,
-            child: const Text(
+            child: Text(
               textAlign: TextAlign.center,
-              "G",
-              style: TextStyle(
+              gname.substring(0, 1).toUpperCase(),
+              style: const TextStyle(
                 fontSize: 25,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -49,7 +54,7 @@ class Grouptile extends StatelessWidget {
             ),
           ),
           title: Text(
-            groupname,
+            groupname.substring(groupname.indexOf("_") + 1),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: const Text(

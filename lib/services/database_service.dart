@@ -48,19 +48,11 @@ class Databaseservice {
   }
 
   // **************************************************
-  // ************** Getting User Groups ***************
-  Future gettingusergroup() async {
-    return usercollection
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .snapshots();
-  }
-
-  // **************************************************
   // **************** Creating Groups *****************
   Future creategroup(String username, String groupname) async {
     GroupModel groupmodel = GroupModel(
       adminName: "${username}_$uid",
-      groupId: "${username}_$uid",
+      groupId: "${groupname}_$uid",
       groupName: groupname,
       recentMessage: "",
       recentMessageSender: "",
@@ -77,10 +69,26 @@ class Databaseservice {
 
     DocumentReference userdocumentreference = usercollection.doc(uid);
     return await userdocumentreference.update({
-      "Groups": FieldValue.arrayUnion([
-        "${groupdocumentReference.id}_$groupname",
-      ]),
+      "Groups": FieldValue.arrayUnion(["${groupname}_$uid"]),
     });
+  }
+
+  // **************************************************
+  // ************** Getting User Groups ***************
+  Future gettingusergroup() async {
+    return usercollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
+  }
+
+  // **************************************************
+  // *************** upload profilepick ***************
+  Future uploadProfilePick(String pick) async {
+    DocumentReference reference = usercollection.doc(
+      FirebaseAuth.instance.currentUser!.uid,
+    );
+
+    reference.update({"Profile-pick": pick});
   }
 
   // **************************************************
@@ -93,9 +101,9 @@ class Databaseservice {
 
   // **************************************************
   // ***************** Getting Chats ******************
-  Future getchat(String groupId) async {
+  Future getchat(String groupid) async {
     return groupcollection
-        .doc(groupId)
+        .doc(groupid)
         .collection("User_messages")
         .orderBy("Time")
         .snapshots();
@@ -103,14 +111,14 @@ class Databaseservice {
 
   // **************************************************
   // ************** Getting Group Admin ***************
-  Future getgroupAdmin(String groupId) async {
-    DocumentReference reference = groupcollection.doc(groupId);
+  Future getgroupAdmin(String groupid) async {
+    DocumentReference reference = groupcollection.doc(groupid);
     return reference.collection("Admin").snapshots();
   }
 
   // Get Group members
-  Future getgroupmembers(groupId) async {
-    return groupcollection.doc(groupId).snapshots();
+  Future getGroupMembers(groupid) async {
+    return groupcollection.doc(groupid).snapshots();
   }
 
   // Search Groups
@@ -119,10 +127,10 @@ class Databaseservice {
   }
 
   // Is-user joined?
-  Future isuserjoined(String groupname, String groupid, String username) async {
+  Future isUserJoined(String groupname, String groupid, String username) async {
     DocumentSnapshot documendSnapshot = await usercollection.doc(uid).get();
     List<dynamic> groups = await documendSnapshot["Groups"];
-    return groups.contains("${groupid}_$groupname") ? true : false;
+    return groups.contains("${groupname}_$groupid") ? true : false;
   }
 
   // Toggeling the group entry and exit
@@ -136,34 +144,33 @@ class Databaseservice {
     DocumentSnapshot documendSnapshot = await userdocumentreference.get();
     List<dynamic> groups = await documendSnapshot["Groups"];
 
-    // For Leaving the Group
+    // For Leaving and Joining the Group
     if (groups.contains("${groupid}_$groupname")) {
       await userdocumentreference.update({
-        "Groups": FieldValue.arrayRemove(["${groupid}_$groupname"])
+        "Groups": FieldValue.arrayRemove(["${groupname}_$groupid"])
       });
-
       await groupdocumnetreference.update({
-        "Members": FieldValue.arrayRemove(["${uid}_$username"])
+        "Members": FieldValue.arrayRemove(["${username}_$uid"])
       });
-    }
-    // For Joining the Group
-    else {
+    } else {
       await userdocumentreference.update({
-        "Groups": FieldValue.arrayUnion(["${groupid}_$groupname"])
+        "Groups": FieldValue.arrayUnion(["${groupname}_$groupid"])
       });
-
       await groupdocumnetreference.update({
-        "Members": FieldValue.arrayUnion(["${uid}_$username"])
+        "Members": FieldValue.arrayUnion(["${username}_$uid"])
       });
     }
   }
 
   // **************************************************
-  // ****************** Sendmessage *******************
+  // ****************** Send message ******************
   void sendmessage(
     String groupid,
     Map<String, dynamic> chatmessagesdata,
   ) async {
+    print("😕🎉👽");
+    print(groupid);
+
     groupcollection
         .doc(groupid)
         .collection("User_messages")

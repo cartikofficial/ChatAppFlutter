@@ -6,12 +6,12 @@ import 'package:groupie/screens/group_info_screen.dart';
 import 'package:groupie/services/database_service.dart';
 
 class ChatsScreen extends StatefulWidget {
-  final String username;
+  final String currentusername;
   final String groupId;
   final String groupname;
   const ChatsScreen({
     super.key,
-    required this.username,
+    required this.currentusername,
     required this.groupId,
     required this.groupname,
   });
@@ -33,14 +33,10 @@ class _ChatscreenState extends State<ChatsScreen> {
 
   void getadminandchats() {
     Databaseservice().getchat(widget.groupId).then((value) {
-      setState(() {
-        chats = value;
-      });
+      setState(() => chats = value);
     });
     Databaseservice().getgroupAdmin(widget.groupId).then((value) {
-      setState(() {
-        admin = value.toString();
-      });
+      setState(() => admin = value.toString());
     });
   }
 
@@ -78,7 +74,7 @@ class _ChatscreenState extends State<ChatsScreen> {
               context,
               GroupInformationScreen(
                 groupId: widget.groupId,
-                adminname: widget.username,
+                adminname: widget.currentusername,
                 groupname: widget.groupname,
               ),
             ),
@@ -150,7 +146,7 @@ class _ChatscreenState extends State<ChatsScreen> {
                   itemBuilder: (BuildContext context, int index) => Messagetile(
                     message: snapshot.data.docs[index]["Message"],
                     sender: snapshot.data.docs[index]["Sender"],
-                    sendedbyme: widget.username.trim() ==
+                    sendedbyme: widget.currentusername.trim() ==
                         snapshot.data.docs[index]['Sender'],
                   ),
                 )
@@ -164,7 +160,7 @@ class _ChatscreenState extends State<ChatsScreen> {
     if (messagecontroller.text.isNotEmpty) {
       Map<String, dynamic> chatmessagemap = {
         "Message": messagecontroller.text.toString().trim(),
-        "Sender": widget.username.trim(),
+        "Sender": widget.currentusername.trim(),
         "Time": DateTime.now().microsecondsSinceEpoch.toString().trim(),
       };
 

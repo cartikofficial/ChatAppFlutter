@@ -6,13 +6,13 @@ import 'package:groupie/services/auth_services.dart';
 import 'package:groupie/screens/profile_screen.dart';
 import 'package:groupie/screens/login_in_screen.dart';
 
-class Userdrawer extends StatelessWidget {
+class Userdrawer extends StatefulWidget {
   final String title;
   final String propic;
   final String username;
   final String useremail;
 
-  Userdrawer({
+  const Userdrawer({
     super.key,
     required this.title,
     required this.propic,
@@ -20,6 +20,11 @@ class Userdrawer extends StatelessWidget {
     required this.username,
   });
 
+  @override
+  State<Userdrawer> createState() => _UserdrawerState();
+}
+
+class _UserdrawerState extends State<Userdrawer> {
   final Authservices authservices = Authservices();
 
   @override
@@ -32,15 +37,15 @@ class Userdrawer extends StatelessWidget {
             currentAccountPictureSize: const Size.fromRadius(40),
             currentAccountPicture: ClipRRect(
               borderRadius: BorderRadius.circular(40),
-              child: propic != ""
-                  ? Image(image: NetworkImage(propic))
+              child: widget.propic != ""
+                  ? Image(image: NetworkImage(widget.propic))
                   : const CircleAvatar(
                       backgroundColor: Colors.grey,
                       child: Icon(Icons.person, size: 65, color: Colors.white),
                     ),
             ),
-            accountName: Text(username),
-            accountEmail: Text(useremail),
+            accountName: Text(widget.username),
+            accountEmail: Text(widget.useremail),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/backimage.png"),
@@ -49,27 +54,27 @@ class Userdrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () => title == "Profile"
+            onTap: () => widget.title == "Profile"
                 ? nextpage(context, const HomeScreen())
                 : null,
-            selected: title == "Groups",
+            selected: widget.title == "Groups",
             leading: const Icon(Icons.group),
             selectedColor: primarycolor,
             title: const Text("Group", style: TextStyle(color: Colors.black)),
           ),
           const Divider(height: 2),
           ListTile(
-            onTap: () => title == "Groups"
+            onTap: () => widget.title == "Groups"
                 ? nextpage(
                     context,
                     Profilescreen(
-                      username: username,
-                      useremail: useremail,
-                      profilepick:propic,
+                      username: widget.username,
+                      useremail: widget.useremail,
+                      profilepick: widget.propic,
                     ),
                   )
                 : null,
-            selected: title == "Profile",
+            selected: widget.title == "Profile",
             selectedColor: primarycolor,
             leading: const Icon(Icons.account_box_sharp),
             title: const Text("Profile", style: TextStyle(color: Colors.black)),

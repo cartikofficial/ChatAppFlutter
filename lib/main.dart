@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:groupie/providers/group_model_provider.dart';
 import 'package:groupie/providers/user_model_provider.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/screens/home_screen.dart';
@@ -135,10 +134,11 @@ class _MainAppState extends State<MainApp> {
       providers: [
         ChangeNotifierProvider<UserModelProvider>(
           create: (context) => UserModelProvider(),
+          lazy: false,
         ),
-        ChangeNotifierProvider<GroupModelProvider>(
-          create: (context) => GroupModelProvider(),
-        )
+        // ChangeNotifierProvider<GroupModelProvider>(
+        //   create: (context) => GroupModelProvider(),
+        // )
       ],
       child: MaterialApp(
         title: "Groupie",
