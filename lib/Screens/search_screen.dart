@@ -7,39 +7,38 @@ import 'package:groupie/services/database_service.dart';
 import 'package:groupie/widgets/widget.dart';
 
 class Searchpage extends StatefulWidget {
-  const Searchpage({super.key});
+  final String currentusername;
+  const Searchpage({super.key, required this.currentusername});
 
   @override
   State<Searchpage> createState() => _SearchpageState();
 }
 
 class _SearchpageState extends State<Searchpage> {
-  User? user;
-  String username = "";
   bool isjoined = false;
   bool isloading = false;
+  String currentusername = "";
   bool hasusersearched = false;
   QuerySnapshot? searchsnapshot;
-  final ValueNotifier<bool> toogle = ValueNotifier<bool>(true);
+  final User user = FirebaseAuth.instance.currentUser!;
+  // final ValueNotifier<bool> toogle = ValueNotifier<bool>(true);
   final TextEditingController searchcontroller = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    getusernameandId();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // getusernameandId();
+  // }
+  // void getusernameandId() async {
+  //   user = FirebaseAuth.instance.currentUser;
+  // }
+
+  String subStringGroupId(String s) {
+    return s.substring(s.indexOf("_") + 1);
   }
 
-  void getusernameandId() async {
-    // await Sharedprefererncedata.getusername().then((value) {
-    //   setState(() {
-    //     username = value!;
-    //   });
-    // });
-    user = FirebaseAuth.instance.currentUser;
-  }
-
-  String getname(String r) {
-    return r.substring(r.indexOf("_") + 1);
+  String subStringAdminName(String s) {
+    return s.substring(0, s.indexOf("_"));
   }
 
   @override
@@ -130,7 +129,7 @@ class _SearchpageState extends State<Searchpage> {
   }
 
   void iniatiatesearchmethod() async {
-    if (searchcontroller.text.isNotEmpty) {
+    if (searchcontroller.text.toString().trim().isNotEmpty) {
       setState(() => isloading = true);
 
       await Databaseservice()
@@ -152,8 +151,16 @@ class _SearchpageState extends State<Searchpage> {
             physics: constbouncebehaviour,
             itemCount: searchsnapshot!.docs.length,
             itemBuilder: (BuildContext context, int index) {
-              return grouptile(
-                username,
+              print("search screen 🤩🤩");
+              print(searchsnapshot!.docs[index]["Group-Id"]);
+              print(searchsnapshot!.docs[index]["Group-Name"]);
+              print(searchsnapshot!.docs[index]["Admin-Name"]);
+
+              // Function to checking that the user has alredy logined or not
+              joinedornot(searchsnapshot!.docs[index]["Group-Id"]);
+
+              return groupTile(
+                currentusername,
                 searchsnapshot!.docs[index]["Group-Id"],
                 searchsnapshot!.docs[index]["Group-Name"],
                 searchsnapshot!.docs[index]["Admin-Name"],
@@ -162,22 +169,16 @@ class _SearchpageState extends State<Searchpage> {
         : Text(
             textAlign: TextAlign.center,
             "Group not found, please check the group name",
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey.withOpacity(0.8),
-            ),
+            style: TextStyle(fontSize: 18, color: Colors.grey.withOpacity(0.8)),
           );
   }
 
-  Widget grouptile(
-    String username,
+  Widget groupTile(
+    String currentusername,
     String groupid,
     String groupname,
     String adminname,
   ) {
-    // Function to checking that the user has alredy logined or not
-    joinedornot(username, groupid, groupname, adminname);
-
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       leading: CircleAvatar(
@@ -193,25 +194,25 @@ class _SearchpageState extends State<Searchpage> {
         style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
       ),
       subtitle: Text(
-        "Admin: ${getname(adminname)}",
+        "Admin: ${subStringAdminName(adminname)}",
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontSize: 13),
       ),
       trailing: InkWell(
         onTap: () async {
-          Databaseservice(uid: user!.uid).togglejoingroup(
+          await Databaseservice(uid: user.uid).toggleJoinorLeaveGroup(
             groupid,
-            username,
-            groupname,
+            widget.currentusername,
           );
-          if (isjoined) {
+
+          if (isjoined == false) {
             setState(() {
               isjoined = !isjoined;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("left the group $groupname"),
-                  duration: const Duration(seconds: 2),
+                  content: Text("Left the group $groupname"),
+                  duration: const Duration(milliseconds: 1500),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -221,8 +222,8 @@ class _SearchpageState extends State<Searchpage> {
               isjoined != isjoined;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("sucessfully joined the group"),
-                  duration: Duration(seconds: 2),
+                  content: Text("Sucessfully joined the group"),
+                  duration: Duration(milliseconds: 1500),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -234,9 +235,9 @@ class _SearchpageState extends State<Searchpage> {
                 nextpage(
                   context,
                   ChatsScreen(
-                    currentusername: username,
+                    currentusername: currentusername,
                     groupId: groupid,
-                    groupname: groupname,
+                    groupname: groupid,
                   ),
                 );
               },
@@ -276,18 +277,9 @@ class _SearchpageState extends State<Searchpage> {
     );
   }
 
-  void joinedornot(
-    String username,
-    String groupid,
-    String groupname,
-    String adminname,
-  ) async {
-    await Databaseservice(uid: user!.uid)
-        .isUserJoined(groupname, groupid, username)
-        .then((value) {
-      toogle.value = value;
-
-      setState(() => isjoined = toogle.value);
+  void joinedornot(String groupid) async {
+    await Databaseservice(uid: user.uid).isUserJoined(groupid).then((value) {
+      setState(() => isjoined = value);
     });
   }
 }

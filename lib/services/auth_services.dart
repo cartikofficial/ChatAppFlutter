@@ -50,6 +50,7 @@ class Authservices {
         email: email,
         password: password,
       );
+
       return true;
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) print("${e.toString()} ☹️☹️");
@@ -65,7 +66,7 @@ class Authservices {
       final GoogleSignInAccount? googleuser = await GoogleSignIn().signIn();
 
       if (googleuser != null) {
-        showpopuploadingdialouge("Loading..", context);
+        showpopuploadingdialouge("Loading...", context);
 
         GoogleSignInAuthentication gauth = await googleuser.authentication;
 
@@ -104,7 +105,7 @@ class Authservices {
   // Sign-out
   Future signout(context) async {
     try {
-      showpopuploadingdialouge("Loading..", context);
+      showpopuploadingdialouge("Loading...", context);
 
       await Sharedprefererncedata.saveuserlogedinstatus(false);
       await Sharedprefererncedata.saveuseremail("");

@@ -45,13 +45,14 @@ void showpopuploadingdialouge(String msg, context) {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(width: 25),
               CircularProgressIndicator(
                 color: primarycolor,
               ),
               const SizedBox(width: 20),
-              Text(msg, style: const TextStyle(fontSize: 16)),
+              Text(msg.trim(), style: const TextStyle(fontSize: 16)),
             ],
           ),
         ),

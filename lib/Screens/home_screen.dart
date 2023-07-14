@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future getUserGroups() async {
-    await Databaseservice().gettingusergroup().then((snapshot) {
+    await Databaseservice().getUserGroups().then((snapshot) {
       setState(() => usercreatedgroups = snapshot);
     });
   }
@@ -46,26 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
   //   await Provider.of<GroupModelProvider>(context, listen: false)
   //       .getchatsdata();
   // }
-
   // void getuserdata() async {
   //   await Sharedprefererncedata.getusername().then((value) {
   //     setState(() => username = value!);
   //   });
   // }
-
-  String getGroupId(String res) {
-    print("get group id");
-    print(res.substring(0, res.indexOf("_")));
-
-    return res.substring(0, res.indexOf("_"));
-  }
-
-  String getGroupNamne(String res) {
-    print("get group name");
-    print(res.substring(res.indexOf("_") + 1));
-
-    return res.substring(res.indexOf("_") + 1);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: true,
             actions: [
               IconButton(
-                onPressed: () => nextpage(context, const Searchpage()),
+                onPressed: () => nextpage(
+                  context,
+                  Searchpage(currentusername: value.getusermodeldata.name),
+                ),
                 icon: const Icon(Icons.search),
               ),
             ],
@@ -129,8 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 int rindex = snapshot.data["Groups"].length - index - 1;
                 return Grouptile(
                   currentusername: currentusername,
-                  groupid: getGroupId(snapshot.data["Groups"][rindex]),
-                  groupname: getGroupNamne(snapshot.data["Groups"][rindex]),
+                  groupid: snapshot.data["Groups"][rindex],
                 );
               },
             );
@@ -182,9 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                onChanged: (value) {
-                  setState(() => groupname = value);
-                },
+                onChanged: (value) => setState(() => groupname = value),
+                cursorColor: primarycolor,
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -231,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SnackBar(
                       content: Text("Group Created Sucessfully"),
                       backgroundColor: Colors.green,
-                      duration: Duration(seconds: 8),
+                      duration: Duration(seconds: 4),
                     ),
                   );
                 }

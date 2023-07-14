@@ -6,6 +6,7 @@ class GroupModel {
   final String adminName;
   final String recentMessage;
   final String recentMessageSender;
+  final String recentmessagetime;
   final List members;
 
   const GroupModel({
@@ -14,6 +15,7 @@ class GroupModel {
     required this.adminName,
     required this.recentMessage,
     required this.recentMessageSender,
+    required this.recentmessagetime,
     required this.members,
   });
 
@@ -23,6 +25,7 @@ class GroupModel {
         "Admin-Name": adminName,
         "Recent-Message": "",
         "Recent-Message-Sender": "",
+        "Recent-Message-Time": "",
         "Members": [],
       };
 
@@ -34,6 +37,7 @@ class GroupModel {
       adminName: data["Admin-Name"],
       recentMessage: data["Recent-Message"],
       recentMessageSender: data["Recent-Message-Sender"],
+      recentmessagetime: data["Recent-Message-Time"],
       members: data["Members"],
     );
   }

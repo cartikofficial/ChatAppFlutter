@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/widget.dart';
+import 'package:groupie/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:groupie/screens/home_screen.dart';
 import 'package:groupie/services/auth_services.dart';
 import 'package:groupie/services/database_service.dart';
 
 class GroupInformationScreen extends StatefulWidget {
-  final String adminname;
+  final String groupadminname;
+  final String currentusername;
   final String groupId;
   final String groupname;
   const GroupInformationScreen({
     super.key,
-    required this.adminname,
+    required this.groupadminname,
+    required this.currentusername,
     required this.groupId,
     required this.groupname,
   });
 
   @override
-  State<GroupInformationScreen> createState() => _GroupinfowidgetState();
+  State<GroupInformationScreen> createState() => _GroupInfoScreenState();
 }
 
-class _GroupinfowidgetState extends State<GroupInformationScreen> {
+class _GroupInfoScreenState extends State<GroupInformationScreen> {
   Stream? groupmembers;
   final Authservices authservices = Authservices();
 
@@ -32,23 +34,30 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
   }
 
   void getGroupMembers() async {
-    Databaseservice(
-      uid: FirebaseAuth.instance.currentUser!.uid,
-    ).getGroupMembers(widget.groupId).then((value) {
-      setState(() => groupmembers = value);
+    Databaseservice().getGroupMembers(widget.groupId).then((snapshot) {
+      setState(() => groupmembers = snapshot);
     });
   }
 
-  String getName(String r) {
-    return r.substring(r.indexOf("_") + 1);
+  String subStringGroupAdminName(String r) {
+    return r.substring(0, r.indexOf("_"));
   }
 
-  String getId(String id) {
-    return id.substring(0, id.indexOf("_"));
+  String subStringMembersName(String r) {
+    return r.substring(0, r.indexOf("_"));
   }
+
+  // String subStringGroupId(String id) {
+  //   return id.substring(0, id.indexOf("_"));
+  // }
 
   @override
   Widget build(BuildContext context) {
+    print("Group information screen ✨😎🙃");
+    print(widget.groupadminname);
+    print(widget.groupId);
+    print(widget.groupname);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Group Info"),
@@ -69,20 +78,16 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
                     actions: [
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: Icon(
-                          Icons.cancel,
-                          color: primarycolor,
-                        ),
+                        icon: Icon(Icons.cancel, color: primarycolor),
                       ),
                       IconButton(
                         onPressed: () async {
                           await Databaseservice(
                             uid: FirebaseAuth.instance.currentUser!.uid,
                           )
-                              .togglejoingroup(
+                              .toggleJoinorLeaveGroup(
                             widget.groupId,
-                            getName(widget.adminname),
-                            widget.groupname,
+                            widget.currentusername,
                           )
                               .whenComplete(() {
                             nextpagereplacement(context, const HomeScreen());
@@ -127,16 +132,25 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
                     ),
                   ),
                   const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Group: ${widget.groupname}",
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 5),
-                      Text("Admin: ${widget.adminname}")
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Group Name: ${widget.groupname}",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          "Admin Name: ${subStringGroupAdminName(widget.groupadminname)}",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -157,6 +171,7 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
             if (snapshot.data["Members"].length != 0) {
               return ListView.builder(
                 shrinkWrap: true,
+                physics: constbouncebehaviour,
                 itemCount: snapshot.data["Members"].length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
@@ -174,8 +189,10 @@ class _GroupinfowidgetState extends State<GroupInformationScreen> {
                           ),
                         ),
                       ),
-                      title: Text(getName(snapshot.data["Members"][index])),
-                      subtitle: Text(getId(snapshot.data["Members"][index])),
+                      title: Text(
+                        subStringMembersName(snapshot.data["Members"][index]),
+                      ),
+                      subtitle: Text(snapshot.data["Members"][index]),
                     ),
                   );
                 },
