@@ -2,23 +2,8 @@
 <html>
 
   <head>
-    <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-
-
-    <meta name="google-signin-client_id" content="329603254190-crlgalh2vngvrg832ocbrlm2nuqdf7md.apps.googleusercontent.com">
-    <!-- <meta name="google-signin-client_id" content="YOUR_GOOGLE_SIGN_IN_OAUTH_CLIENT_ID.apps.googleusercontent.com"> -->
+    <meta name="google-signin-client_id"
+      content="329603254190-crlgalh2vngvrg832ocbrlm2nuqdf7md.apps.googleusercontent.com">
 
     <!-- Croppie -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
@@ -37,11 +22,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Groupie">
     <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-
-    <!-- Favicon
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png"> -->
 
     <title>Groupie</title>
     <link rel="manifest" href="manifest.json">
@@ -77,9 +57,7 @@
       window.addEventListener('load', function (ev) {
         // Download main.dart.js
         _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
+          serviceWorker: { serviceWorkerVersion: serviceWorkerVersion },
           onEntrypointLoaded: function (engineInitializer) {
             engineInitializer.initializeEngine().then(function (appRunner) {
               appRunner.runApp();
