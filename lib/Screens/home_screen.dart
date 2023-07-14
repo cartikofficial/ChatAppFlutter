@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:groupie/Screens/drawer.dart';
-import 'package:groupie/widgets/group_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:groupie/widgets/widget.dart';
+import 'package:groupie/Screens/drawer.dart';
 import 'package:groupie/shared/constants.dart';
+import 'package:groupie/widgets/group_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:groupie/screens/search_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:groupie/services/database_service.dart';
 import 'package:groupie/providers/user_model_provider.dart';
 
@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     getUserGroups();
     callingusermodelprovider(context);
-    // callinggroupmodelprovider(context);
   }
 
   Future getUserGroups() async {
@@ -41,16 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   callingusermodelprovider(context) async {
     await Provider.of<UserModelProvider>(context, listen: false).getuserdata();
   }
-
-  // callinggroupmodelprovider(context) async {
-  //   await Provider.of<GroupModelProvider>(context, listen: false)
-  //       .getchatsdata();
-  // }
-  // void getuserdata() async {
-  //   await Sharedprefererncedata.getusername().then((value) {
-  //     setState(() => username = value!);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ? Center(child: CircularProgressIndicator(color: primarycolor))
               : groupinfowidget(value.getusermodeldata.name),
 
+          // Floating Action Button
           floatingActionButton: FloatingActionButton(
             elevation: 0,
             backgroundColor: primarycolor,
@@ -141,11 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             GestureDetector(
               onTap: () => createyourgrouppopup(context, currentusername),
-              child: Icon(
-                size: 80,
-                Icons.add_circle,
-                color: Colors.grey[700],
-              ),
+              child: Icon(size: 80, Icons.add_circle, color: Colors.grey[700]),
             ),
             const SizedBox(height: 10),
             const Text(
@@ -175,15 +161,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: primarycolor,
-                    ),
+                    borderSide: BorderSide(color: primarycolor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: primarycolor,
-                    ),
+                    borderSide: BorderSide(color: primarycolor),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),

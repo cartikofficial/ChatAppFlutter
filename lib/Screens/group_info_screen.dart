@@ -53,11 +53,6 @@ class _GroupInfoScreenState extends State<GroupInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Group information screen ✨😎🙃");
-    print(widget.groupadminname);
-    print(widget.groupId);
-    print(widget.groupname);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Group Info"),
@@ -181,7 +176,9 @@ class _GroupInfoScreenState extends State<GroupInformationScreen> {
                         radius: 22,
                         backgroundColor: primarycolor,
                         child: Text(
-                          widget.groupname.substring(0, 1).toUpperCase(),
+                          subStringMembersName(snapshot.data["Members"][index])
+                              .substring(0, 1)
+                              .toUpperCase(),
                           style: const TextStyle(
                             fontSize: 22,
                             color: Colors.white,

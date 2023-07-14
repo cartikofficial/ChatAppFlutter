@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:groupie/screens/chat_screen.dart';
+import 'package:groupie/widgets/widget.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:groupie/screens/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:groupie/services/database_service.dart';
-import 'package:groupie/widgets/widget.dart';
 
 class Searchpage extends StatefulWidget {
   final String currentusername;
@@ -17,21 +17,11 @@ class Searchpage extends StatefulWidget {
 class _SearchpageState extends State<Searchpage> {
   bool isjoined = false;
   bool isloading = false;
-  String currentusername = "";
+  // String currentusername = "";
   bool hasusersearched = false;
   QuerySnapshot? searchsnapshot;
   final User user = FirebaseAuth.instance.currentUser!;
-  // final ValueNotifier<bool> toogle = ValueNotifier<bool>(true);
   final TextEditingController searchcontroller = TextEditingController();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // getusernameandId();
-  // }
-  // void getusernameandId() async {
-  //   user = FirebaseAuth.instance.currentUser;
-  // }
 
   String subStringGroupId(String s) {
     return s.substring(s.indexOf("_") + 1);
@@ -106,7 +96,7 @@ class _SearchpageState extends State<Searchpage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               isloading
                   ? Center(
                       child: CircularProgressIndicator(color: primarycolor),
@@ -151,21 +141,15 @@ class _SearchpageState extends State<Searchpage> {
             physics: constbouncebehaviour,
             itemCount: searchsnapshot!.docs.length,
             itemBuilder: (BuildContext context, int index) {
-              print("search screen 🤩🤩");
-              print(searchsnapshot!.docs[index]["Group-Id"]);
-              print(searchsnapshot!.docs[index]["Group-Name"]);
-              print(searchsnapshot!.docs[index]["Admin-Name"]);
-
-              // Function to checking that the user has alredy logined or not
               joinedornot(searchsnapshot!.docs[index]["Group-Id"]);
-
               return groupTile(
-                currentusername,
+                widget.currentusername,
                 searchsnapshot!.docs[index]["Group-Id"],
                 searchsnapshot!.docs[index]["Group-Name"],
                 searchsnapshot!.docs[index]["Admin-Name"],
               );
-            })
+            },
+          )
         : Text(
             textAlign: TextAlign.center,
             "Group not found, please check the group name",
@@ -180,13 +164,16 @@ class _SearchpageState extends State<Searchpage> {
     String adminname,
   ) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       leading: CircleAvatar(
         radius: 25,
         backgroundColor: primarycolor,
         child: Text(
           groupname.substring(0, 1).toUpperCase(),
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       title: Text(
