@@ -1,12 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:groupie/models/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:groupie/widgets/widget.dart';
-import 'package:groupie/Screens/drawer.dart';
+import 'package:groupie/widgets/drawer.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:groupie/widgets/group_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:groupie/screens/search_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:groupie/services/database_service.dart';
 import 'package:groupie/providers/user_model_provider.dart';
 
@@ -21,14 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
   String groupname = "";
   bool isloading = false;
   Stream? usercreatedgroups;
-  Stream<QuerySnapshot<Map<String, dynamic>>>? s;
+  Future<Usermodel>? userdata;
   final ValueNotifier<bool> toogle = ValueNotifier<bool>(true);
 
   @override
   void initState() {
     super.initState();
     getUserGroups();
-    callingusermodelprovider(context);
+    userdata = callingusermodelprovider(context);
   }
 
   Future getUserGroups() async {
@@ -37,58 +38,77 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  callingusermodelprovider(context) async {
-    await Provider.of<UserModelProvider>(context, listen: false).getuserdata();
+  Future<Usermodel> callingusermodelprovider(context) async {
+    Usermodel usermodel =
+        await Provider.of<UserModelProvider>(context, listen: false)
+            .getuserdata();
+
+    if (kDebugMode) print(usermodel.tojson());
+
+    return usermodel;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserModelProvider>(
-      builder: (context, value, child) {
-        return Scaffold(
-          // Drawer
-          drawer: Userdrawer(
-            title: "Groups",
-            propic: value.getusermodeldata.profilepick,
-            useremail: value.getusermodeldata.email,
-            username: value.getusermodeldata.name,
-          ),
-
-          // AppBar
-          appBar: AppBar(
-            backgroundColor: primarycolor,
-            title: const Text(
-              "Groups",
-              style: TextStyle(fontSize: 28, color: Colors.white),
-            ),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                onPressed: () => nextpage(
-                  context,
-                  Searchpage(currentusername: value.getusermodeldata.name),
+    return FutureBuilder(
+      future: userdata,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Consumer<UserModelProvider>(
+            builder: (context, value, child) {
+              return Scaffold(
+                // Drawer
+                drawer: Userdrawer(
+                  title: "Groups",
+                  propic: value.getusermodeldata.profilepick,
+                  useremail: value.getusermodeldata.email,
+                  username: value.getusermodeldata.name,
                 ),
-                icon: const Icon(Icons.search),
-              ),
-            ],
-          ),
 
-          // Body
-          body: isloading
-              ? Center(child: CircularProgressIndicator(color: primarycolor))
-              : groupinfowidget(value.getusermodeldata.name),
+                // AppBar
+                appBar: AppBar(
+                  backgroundColor: primarycolor,
+                  title: const Text(
+                    "Groups",
+                    style: TextStyle(fontSize: 28, color: Colors.white),
+                  ),
+                  centerTitle: true,
+                  actions: [
+                    IconButton(
+                      onPressed: () => nextpage(
+                        context,
+                        Searchpage(
+                            currentusername: value.getusermodeldata.name),
+                      ),
+                      icon: const Icon(Icons.search),
+                    ),
+                  ],
+                ),
 
-          // Floating Action Button
-          floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            backgroundColor: primarycolor,
-            child: const Icon(Icons.add, size: 35),
-            onPressed: () => createyourgrouppopup(
-              context,
-              value.getusermodeldata.name,
-            ),
-          ),
-        );
+                // Body
+                body: isloading
+                    ? Center(
+                        child: CircularProgressIndicator(color: primarycolor))
+                    : groupinfowidget(value.getusermodeldata.name),
+
+                // Floating Action Button
+                floatingActionButton: FloatingActionButton(
+                  elevation: 0,
+                  backgroundColor: primarycolor,
+                  child: const Icon(Icons.add, size: 35),
+                  onPressed: () => createyourgrouppopup(
+                    context,
+                    value.getusermodeldata.name,
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator(color: primarycolor)),
+          );
+        }
       },
     );
   }

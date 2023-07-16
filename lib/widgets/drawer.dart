@@ -55,7 +55,7 @@ class _UserdrawerState extends State<Userdrawer> {
           ),
           ListTile(
             onTap: () => widget.title == "Profile"
-                ? nextpage(context, const HomeScreen())
+                ? nextpagereplacement(context, const HomeScreen())
                 : null,
             selected: widget.title == "Groups",
             leading: const Icon(Icons.group),

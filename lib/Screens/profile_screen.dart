@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_services.dart';
 import 'package:flutter/foundation.dart';
-import 'package:groupie/screens/drawer.dart';
+import 'package:groupie/widgets/drawer.dart';
 import 'package:groupie/shared/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:groupie/services/image_picker.dart';
